@@ -12,11 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 export function SidebarFooterInfo({
   user,
@@ -28,57 +24,56 @@ export function SidebarFooterInfo({
   };
 }) {
   return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={
-              <SidebarMenuButton
-                size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-              ></SidebarMenuButton>
-            }
-          >
-            <div className="gap-2 flex w-full items-center justify-center p-2">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-foreground">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                </Avatar>
-              </div>
-              <div className="flex flex-col items-start justify-center text-left text-sm leading-tight">
-                <span className="truncate font-semibold text-sm">
-                  {user.name}
-                </span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+    <div className="flex w-full items-center justify-center">
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              size="lg"
+              variant="ghost"
+              className="data-[state=open]:bg-foreground w-full flex h-16 p-1 rounded-none data-[state=open]:text-sidebar-accent-foreground"
+            ></Button>
+          }
+        >
+          <div className="gap-2 flex w-full items-center justify-center p-2">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-foreground">
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+              </Avatar>
             </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent side="right" align="start" sideOffset={8}>
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Profile
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Settings />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <LogOut />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
+            <div className="flex flex-col items-start justify-center text-left text-sm leading-tight">
+              <span className="truncate font-semibold text-sm">
+                {user.name}
+              </span>
+              <span className="truncate text-xs">{user.email}</span>
+            </div>
+            <ChevronsUpDown className="ml-auto size-4" />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="right" align="start" sideOffset={8}>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuItem>
+              <BadgeCheck />
+              Profile
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <Settings />
+              Settings
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuGroup>
+            <DropdownMenuItem>
+              <LogOut />
+              Log out
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 }
