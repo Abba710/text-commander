@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 
 export function MainTest() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div
@@ -14,7 +14,7 @@ export function MainTest() {
     >
       <div className="w-full h-full rounded-2xl border border-border/60 bg-background from-muted/40 to-transparent p-6 flex flex-col gap-6">
         <Field>
-          {/* Заголовок */}
+          {/* Header */}
           <div className="flex items-center gap-3 pb-1">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
               <Sparkles className="h-5 w-5" />
@@ -36,7 +36,7 @@ export function MainTest() {
             </div>
           </div>
 
-          {/* Поле теста */}
+          {/* Test area */}
           <Textarea
             id="textarea-message"
             placeholder="Type your message here."
@@ -48,7 +48,7 @@ export function MainTest() {
             text field to pick a snippet from the context menu.
           </FieldDescription>
 
-          {/* Призыв создать команду */}
+          {/* Create command CTA */}
           <div className="flex items-center justify-between gap-4 rounded-xl border border-dashed border-border/70 bg-muted/30 px-4 py-3 mt-1">
             <div className="flex items-center gap-2.5">
               <Wand2 className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -61,12 +61,10 @@ export function MainTest() {
             </div>
             <Button
               variant="default"
-              onClick={() => {
-                navigate("/add");
-              }}
               size="lg"
+              onClick={() => navigate("/add")}
             >
-              Add command
+              Add Command
             </Button>
           </div>
         </Field>
