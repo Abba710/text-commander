@@ -5,6 +5,7 @@ import { Hash, Terminal, MessageSquareText } from "lucide-react";
 import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
+import { Card } from "@/components/ui/card";
 
 export function CommandInput() {
   const [label, setLabel] = useState("");
@@ -13,10 +14,10 @@ export function CommandInput() {
 
   return (
     <div className="flex w-full h-full items-start justify-start px-6">
-      <div className="w-full h-full rounded-2xl border border-border/60 bg-background from-muted/40 to-transparent p-6 flex flex-col gap-6">
+      <Card className="w-full h-full rounded-2xl border border-border/60 from-muted/40 to-transparent p-6 flex flex-col gap-6">
         {/* Header */}
         <div className="flex items-center gap-3 pb-4 border-b border-border/60">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-foreground text-background">
             <Terminal className="h-5 w-5" />
           </div>
           <div>
@@ -100,7 +101,7 @@ export function CommandInput() {
             </div>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

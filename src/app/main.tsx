@@ -5,7 +5,6 @@ import "@/index.css";
 import Router from "./router";
 import { BrowserRouter } from "react-router";
 
-document.documentElement.classList.add("dark");
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

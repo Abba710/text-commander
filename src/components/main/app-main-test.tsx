@@ -3,6 +3,7 @@ import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
+import { Card } from "../ui/card";
 
 export function MainTest() {
   const navigate = useNavigate();
@@ -12,11 +13,11 @@ export function MainTest() {
       data-debug="main test component"
       className="flex w-full h-full items-start justify-start px-6"
     >
-      <div className="w-full h-full rounded-2xl border border-border/60 bg-background from-muted/40 to-transparent p-6 flex flex-col gap-6">
+      <Card className="w-full h-full rounded-2xl border border-border/60 from-muted/40 to-transparent p-6 flex flex-col gap-6">
         <Field>
           {/* Header */}
           <div className="flex items-center gap-3 pb-1">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-foreground text-background shrink-0">
               <Sparkles className="h-5 w-5" />
             </div>
             <div className="flex flex-col gap-1">
@@ -68,7 +69,7 @@ export function MainTest() {
             </Button>
           </div>
         </Field>
-      </div>
+      </Card>
     </div>
   );
 }
