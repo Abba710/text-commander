@@ -1,19 +1,20 @@
 import {
   AppHeader,
   AppSidebar,
-  AppMain,
   SidebarInset,
   SidebarProvider,
 } from "@/components";
+import { Outlet } from "react-router";
 
 export default function App() {
   return (
     <div className="w-full h-full">
       <SidebarProvider>
         <AppSidebar />
+
         <SidebarInset>
           <AppHeader />
-          <AppMain />
+          <Outlet />
         </SidebarInset>
       </SidebarProvider>
     </div>

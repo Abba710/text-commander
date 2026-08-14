@@ -12,7 +12,7 @@ export function MainInfo() {
   return (
     <div
       data-debug="main info component"
-      className="p-4 mx-auto flex flex-col gap-2 w-full max-w-xs"
+      className=" mx-auto flex flex-col gap-2 w-full max-w-xs"
     >
       <Card size="sm" className="flex flex-col justify-center w-full p-2">
         <CardHeader className="flex flex-col justify-center w-full">
