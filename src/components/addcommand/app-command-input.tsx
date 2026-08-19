@@ -6,11 +6,37 @@ import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useCommandManagement } from "@/hooks/use-command-management";
+import { useNavigate } from "react-router";
 
 export function CommandInput() {
+  const navigate = useNavigate();
+
+  const errorMessages = {
+    EMPTY: "Trigger cannot be empty",
+    ALREADY_EXISTS: "Trigger already exists. Choose a different one",
+    INVALID_FORMAT: "Invalid trigger format",
+  };
+
+  const [triggerError, setTriggerError] = useState<string | null>(null);
   const [label, setLabel] = useState("");
   const [trigger, setTrigger] = useState("");
   const [text, setText] = useState("");
+  const args = [...text.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]);
+  const previewArgs = [...text.matchAll(/\{([^{}]+)\}/g)].map(
+    (match) => match[1] + " ",
+  );
+  const handleSaveClick = () => {
+    const result = addCommand(label, trigger, args, text);
+    if (result.success === false) {
+      setTriggerError(errorMessages[result.error]);
+    } else {
+      setTriggerError(null);
+      navigate("/");
+    }
+  };
+  const { addCommand } = useCommandManagement();
 
   return (
     <div className="flex w-full h-full items-start justify-start px-6">
@@ -25,6 +51,17 @@ export function CommandInput() {
             <p className="text-sm text-muted-foreground mt-1">
               Set a name, trigger, arguments, and the text to be inserted
             </p>
+          </div>
+          <div className="ml-auto">
+            <Button
+              onClick={() => {
+                handleSaveClick();
+              }}
+              variant="default"
+              size="default"
+            >
+              Save
+            </Button>
           </div>
         </div>
 
@@ -67,9 +104,9 @@ export function CommandInput() {
         </div>
 
         {/* Command Text */}
-        <div className="flex flex-col gap-2 flex-1">
-          <div className="flex items-center justify-between">
-            <FieldLabel className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+        <div className="flex max-w-full flex-col gap-2 flex-1">
+          <div className="flex max-w-full items-center justify-between">
+            <FieldLabel className="flex max-w-full items-center gap-1.5 text-sm font-medium text-foreground">
               <MessageSquareText className="h-3.5 w-3.5 text-muted-foreground" />
               Text
             </FieldLabel>
@@ -81,13 +118,13 @@ export function CommandInput() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Enter the text you want to bind to the command..."
-            className="min-h-56 resize-none flex-1"
+            className="min-h-56 max-w-300 resize-none flex-1"
           />
         </div>
 
         {/* Preview */}
         {(trigger || text) && (
-          <div className="rounded-xl border border-dashed border-border/70 bg-muted/30 px-4 py-3">
+          <div className="rounded-xl max-w-300 border border-dashed border-border/70 bg-muted/30 px-4 py-3">
             <p className="text-xs font-medium text-muted-foreground mb-1.5">
               Preview
             </p>
@@ -96,7 +133,7 @@ export function CommandInput() {
                 /{trigger || "command-name"}
               </span>
               <span className="text-muted-foreground truncate">
-                {text || "Command text will appear here"}
+                {previewArgs || "Command text will appear here"}
               </span>
             </div>
           </div>

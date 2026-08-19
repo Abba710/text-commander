@@ -1,4 +1,4 @@
-import { CommandInput } from "@/components/addpage/index";
+import { CommandInput } from "@/components/addcommand/index";
 import { MainInfo } from "@/components/main";
 
 export function AddPage() {

@@ -67,7 +67,11 @@ export function SidebarFooterInfo({
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("logout trigger");
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

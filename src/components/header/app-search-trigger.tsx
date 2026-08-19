@@ -14,7 +14,7 @@ export default function SearchTrigger() {
         />
         <div className="flex items-center">
           <Keyboard size={16} className="text-muted-foreground" />
-          <span className="ml-2 text-sm text-muted-foreground">CTRL + /</span>
+          <span className="ml-2 text-sm text-muted-foreground">CTRL + K</span>
         </div>
       </Button>
     </>

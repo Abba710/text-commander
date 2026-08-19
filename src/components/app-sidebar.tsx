@@ -13,6 +13,7 @@ import {
   SidebarContentTree,
   SidebarFooterInfo,
 } from "./sidebar";
+import { useCommandStore } from "@/store/commandStore";
 
 const data = {
   user: {
@@ -36,6 +37,8 @@ const data = {
 };
 
 export function AppSidebar() {
+  const { commands } = useCommandStore();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -46,9 +49,7 @@ export function AppSidebar() {
         <SidebarGroupLabel>Commands</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            {data.tree.map((item, index) => (
-              <SidebarContentTree key={index} item={item} />
-            ))}
+            <SidebarContentTree commands={commands} />
           </SidebarMenu>
         </SidebarGroupContent>
         <SidebarGroup />

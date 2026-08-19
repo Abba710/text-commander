@@ -8,44 +8,61 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-
+import type { Command, CommandFolder, Tree } from "@/types";
 import { ChevronRight, File, Folder } from "lucide-react";
 
-type TreeItem = string | TreeItem[];
-
-export function SidebarContentTree({ item }: { item: TreeItem }) {
-  const [name, ...items] = Array.isArray(item) ? item : [item];
-  if (!items.length) {
-    return (
-      <SidebarMenuButton
-        isActive={name === "button.tsx"}
-        className="data-[active=true]:bg-transparent"
-      >
-        <File />
-        {name}
-      </SidebarMenuButton>
-    );
-  }
+function CommandLeaf({ command }: { command: Command }) {
   return (
     <SidebarMenuItem>
-      <Collapsible>
+      <SidebarMenuButton className="data-[active=true]:bg-transparent">
+        <File />
+        {command.Label}
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+}
+
+function CommandFolderNode({ folder }: { folder: CommandFolder }) {
+  const isEmpty = folder.commands.length === 0 && folder.children.length === 0;
+
+  return (
+    <SidebarMenuItem>
+      <Collapsible defaultOpen={false}>
         <CollapsibleTrigger
           render={
             <SidebarMenuButton className="[&[data-panel-open]_.chevron]:rotate-90">
               <ChevronRight className="chevron transition-transform" />
               <Folder />
-              {name}
+              {folder.Label}
             </SidebarMenuButton>
           }
         />
-        <CollapsibleContent>
-          <SidebarMenuSub>
-            {items.map((subItem, index) => (
-              <SidebarContentTree key={index} item={subItem} />
-            ))}
-          </SidebarMenuSub>
-        </CollapsibleContent>
+        {!isEmpty && (
+          <CollapsibleContent>
+            <SidebarMenuSub>
+              {folder.children.map((child) => (
+                <CommandFolderNode key={child.id} folder={child} />
+              ))}
+              {folder.commands.map((command) => (
+                <CommandLeaf key={command.id} command={command} />
+              ))}
+            </SidebarMenuSub>
+          </CollapsibleContent>
+        )}
       </Collapsible>
     </SidebarMenuItem>
+  );
+}
+
+export function SidebarContentTree({ commands, commandFolders }: Tree) {
+  return (
+    <>
+      {commandFolders?.map((folder) => (
+        <CommandFolderNode key={folder.id} folder={folder} />
+      ))}
+      {commands.map((command) => (
+        <CommandLeaf key={command.id} command={command} />
+      ))}
+    </>
   );
 }
