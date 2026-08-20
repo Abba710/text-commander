@@ -14,12 +14,11 @@ export function CommandInput() {
   const navigate = useNavigate();
 
   const errorMessages = {
-    EMPTY: "Trigger cannot be empty",
+    EMPTY: "Field cannot be empty",
     ALREADY_EXISTS: "Trigger already exists. Choose a different one",
-    INVALID_FORMAT: "Invalid trigger format",
   };
 
-  const [triggerError, setTriggerError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [label, setLabel] = useState("");
   const [trigger, setTrigger] = useState("");
   const [text, setText] = useState("");
@@ -29,10 +28,14 @@ export function CommandInput() {
   );
   const handleSaveClick = () => {
     const result = addCommand(label, trigger, args, text);
-    if (result.success === false) {
-      setTriggerError(errorMessages[result.error]);
+    if (!result.success) {
+      const next: Record<string, string> = {};
+      for (const { field, error } of result.errors) {
+        next[field] = errorMessages[error];
+      }
+      setFieldErrors(next);
     } else {
-      setTriggerError(null);
+      setFieldErrors({});
       navigate("/");
     }
   };
@@ -76,8 +79,8 @@ export function CommandInput() {
               required
               value={label}
               onChange={(e) => setLabel(e.target.value)}
-              placeholder="For example, Greeting"
-              className="h-11"
+              placeholder={fieldErrors.label ?? "For example, Greeting"}
+              className={`h-11 ${fieldErrors.label ? "border-red-500" : ""}`}
             />
           </div>
 
@@ -96,8 +99,8 @@ export function CommandInput() {
                 onChange={(e) =>
                   setTrigger(e.target.value.replace(/\s/g, "-").toLowerCase())
                 }
-                placeholder="command-name"
-                className="h-11 pl-6 font-mono"
+                placeholder={fieldErrors.trigger ?? "command-name"}
+                className={`h-11 pl-6 font-mono ${fieldErrors.trigger ? "border-red-500" : ""}`}
               />
             </div>
           </div>
@@ -117,8 +120,8 @@ export function CommandInput() {
           <Textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Enter the text you want to bind to the command..."
-            className="min-h-56 max-w-300 resize-none flex-1"
+            placeholder={`${fieldErrors.template ?? "Enter the text you want to bind to the command..."}`}
+            className={`min-h-56 max-w-300 resize-none flex-1 ${fieldErrors.template ? "border border-red-500" : ""}`}
           />
         </div>
 

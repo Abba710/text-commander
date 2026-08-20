@@ -1,6 +1,6 @@
 import type { Command } from "@/types";
 
-export type TriggerError = "EMPTY" | "ALREADY_EXISTS" | "INVALID_FORMAT";
+export type TriggerError = "EMPTY" | "ALREADY_EXISTS";
 
 export interface validatorInput {
   commands: Command[];
@@ -29,9 +29,9 @@ export type validationResult =
     };
 
 export type validatorResult =
-  | {
-      success: false;
-      field: "label" | "trigger" | "template";
-      error: TriggerError;
-    }
-  | { success: true };
+  { success: false; errors: FieldError[] } | { success: true };
+
+export type FieldError = {
+  field: "label" | "trigger" | "template";
+  error: TriggerError;
+};

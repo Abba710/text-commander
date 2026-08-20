@@ -5,6 +5,7 @@ import type {
   validateTemplate,
   validatorResult,
   validationResult,
+  FieldError,
 } from "./validator-types";
 
 export type {
@@ -14,4 +15,5 @@ export type {
   validateTemplate,
   validatorResult,
   validationResult,
+  FieldError,
 };

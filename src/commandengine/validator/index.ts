@@ -3,7 +3,7 @@ import {
   validateTrigger,
   validateTemplate,
 } from "./validator-functions";
-import type { validatorInput, validatorResult } from "../types";
+import type { validatorInput, validatorResult, FieldError } from "../types";
 
 export function validator({
   commands,
@@ -11,20 +11,22 @@ export function validator({
   trigger,
   template,
 }: validatorInput): validatorResult {
+  const errors: FieldError[] = [];
+
   const labelResult = validateLabel({ label });
   if (!labelResult.success) {
-    return { success: false, field: "label", error: labelResult.error };
+    errors.push({ field: "label", error: labelResult.error });
   }
 
   const triggerResult = validateTrigger({ trigger, commands });
   if (!triggerResult.success) {
-    return { success: false, field: "trigger", error: triggerResult.error };
+    errors.push({ field: "trigger", error: triggerResult.error });
   }
 
   const templateResult = validateTemplate({ template });
   if (!templateResult.success) {
-    return { success: false, field: "template", error: templateResult.error };
+    errors.push({ field: "template", error: templateResult.error });
   }
 
-  return { success: true };
+  return { success: errors.length === 0, errors };
 }
