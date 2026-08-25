@@ -4,13 +4,30 @@ import { useState } from "react";
 import { Hash, Terminal, MessageSquareText } from "lucide-react";
 import { FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCommandManagement } from "@/hooks/use-command-management";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { NotFound } from "@/page/404";
+import { useEffect } from "react";
 
-export function CommandInput() {
+export function EditCommand() {
+  const { findCommand, editCommand } = useCommandManagement();
+
+  const { id } = useParams();
+
+  if (!id) return <NotFound />;
+  const command = findCommand(id);
+  if (!command) return <NotFound />;
+
+  useEffect(() => {
+    setFieldErrors({});
+    setLabel(command.label);
+    setTrigger(command.trigger);
+    setTemplate(command.template);
+  }, [id, command]);
+
   const navigate = useNavigate();
 
   const errorMessages = {
@@ -19,15 +36,16 @@ export function CommandInput() {
   };
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [label, setLabel] = useState("");
-  const [trigger, setTrigger] = useState("");
-  const [template, setTemplate] = useState("");
+  const [label, setLabel] = useState(command?.label ?? "");
+  const [trigger, setTrigger] = useState(command?.trigger ?? "");
+  const [template, setTemplate] = useState(command?.template ?? "");
+
   const args = [...template.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]);
   const previewArgs = [...template.matchAll(/\{([^{}]+)\}/g)].map(
     (match) => match[1] + " ",
   );
   const handleSaveClick = () => {
-    const result = addCommand(label, trigger, args, template);
+    const result = editCommand({ id, label, trigger, args, template });
     if (!result.success) {
       const next: Record<string, string> = {};
       for (const { field, error } of result.errors) {
@@ -39,8 +57,10 @@ export function CommandInput() {
       navigate("/");
     }
   };
-  const { addCommand } = useCommandManagement();
 
+  if (!command) {
+    return <NotFound />;
+  }
   return (
     <div className="flex w-full h-full items-start justify-start px-6">
       <Card className="w-full h-full rounded-2xl border border-border/60 from-muted/40 to-transparent p-6 flex flex-col gap-6">
@@ -50,7 +70,9 @@ export function CommandInput() {
             <Terminal className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold leading-none">New Command</h2>
+            <h2 className="text-lg font-semibold leading-none">
+              Edit Command {command.label}
+            </h2>
             <p className="text-sm text-muted-foreground mt-1">
               Set a name, trigger, arguments, and the text to be inserted
             </p>
@@ -111,7 +133,7 @@ export function CommandInput() {
           <div className="flex max-w-full items-center justify-between">
             <FieldLabel className="flex max-w-full items-center gap-1.5 text-sm font-medium text-foreground">
               <MessageSquareText className="h-3.5 w-3.5 text-muted-foreground" />
-              Text
+              Template
             </FieldLabel>
             <span className="text-xs text-muted-foreground tabular-nums">
               {template.length} characters

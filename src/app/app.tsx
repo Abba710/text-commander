@@ -11,7 +11,6 @@ export default function App() {
     <div className="w-full h-full">
       <SidebarProvider>
         <AppSidebar />
-
         <SidebarInset>
           <AppHeader />
           <Outlet />

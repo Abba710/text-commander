@@ -10,13 +10,18 @@ import {
 } from "@/components/ui/collapsible";
 import type { Command, CommandFolder, Tree } from "@/types";
 import { ChevronRight, File, Folder } from "lucide-react";
+import { useNavigate } from "react-router";
 
 function CommandLeaf({ command }: { command: Command }) {
+  const navigate = useNavigate();
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton className="data-[active=true]:bg-transparent">
+      <SidebarMenuButton
+        onClick={() => navigate(`/command/${command.id}`)}
+        className="data-[active=true]:bg-transparent"
+      >
         <File />
-        {command.Label}
+        {command.label}
       </SidebarMenuButton>
     </SidebarMenuItem>
   );
@@ -33,7 +38,7 @@ function CommandFolderNode({ folder }: { folder: CommandFolder }) {
             <SidebarMenuButton className="[&[data-panel-open]_.chevron]:rotate-90">
               <ChevronRight className="chevron transition-transform" />
               <Folder />
-              {folder.Label}
+              {folder.label}
             </SidebarMenuButton>
           }
         />

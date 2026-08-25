@@ -1,6 +1,6 @@
 export interface Command {
   id: string;
-  Label: string;
+  label: string;
   trigger: string;
   args: string[];
   template: string;
@@ -9,7 +9,7 @@ export interface Command {
 
 export interface CommandFolder {
   id: string;
-  Label: string;
+  label: string;
   children: CommandFolder[];
   commands: Command[];
 }
