@@ -6,6 +6,7 @@ import {
 import type { validatorInput, validatorResult, FieldError } from "../types";
 
 export function validator({
+  id,
   commands,
   label,
   trigger,
@@ -18,7 +19,7 @@ export function validator({
     errors.push({ field: "label", error: labelResult.error });
   }
 
-  const triggerResult = validateTrigger({ trigger, commands });
+  const triggerResult = validateTrigger({ id, trigger, commands });
   if (!triggerResult.success) {
     errors.push({ field: "trigger", error: triggerResult.error });
   }

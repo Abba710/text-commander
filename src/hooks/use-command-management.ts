@@ -16,14 +16,15 @@ export function useCommandManagement() {
       args: string[],
       template: string,
     ): validatorResult => {
+      const id = crypto.randomUUID();
       // Validate the command
-      const validation = validator({ commands, label, trigger, template });
+      const validation = validator({ id, commands, label, trigger, template });
       if (!validation.success) {
         return validation;
       }
       // Create the command
       const command: Command = {
-        id: crypto.randomUUID(),
+        id: id,
         label,
         args,
         trigger,
@@ -47,11 +48,25 @@ export function useCommandManagement() {
     (command: Command): validatorResult => {
       const existingCommand = commands.find((c) => c.id === command.id);
 
+      // If the command doesn't exist, return an error
       if (!existingCommand) {
         return { success: false, errors: [] };
       }
 
+      // Check if there are any changes
+      const hasChanges =
+        command.label !== existingCommand.label ||
+        command.trigger !== existingCommand.trigger ||
+        command.template !== existingCommand.template;
+
+      // If there are no changes, return success
+      if (!hasChanges) {
+        return { success: true };
+      }
+
+      // Validate the command
       const validation = validator({
+        id: command.id,
         commands,
         label: command.label,
         trigger: command.trigger,
@@ -62,6 +77,7 @@ export function useCommandManagement() {
         return validation;
       }
 
+      // Update the command in the store
       editCommandInStore(command.id, {
         ...command,
         updTime: Date.now(),

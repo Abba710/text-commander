@@ -18,6 +18,7 @@ export function validateLabel({ label }: validateLabel): validationResult {
 }
 
 export function validateTrigger({
+  id,
   trigger,
   commands,
 }: validateTrigger): validationResult {
@@ -28,7 +29,9 @@ export function validateTrigger({
     };
   }
 
-  if (commands.some((command) => command.trigger === trigger)) {
+  if (
+    commands.some((command) => command.trigger === trigger && command.id !== id)
+  ) {
     return {
       success: false,
       error: "ALREADY_EXISTS",

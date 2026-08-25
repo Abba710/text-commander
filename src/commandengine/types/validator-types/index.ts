@@ -3,6 +3,7 @@ import type { Command } from "@/types";
 export type TriggerError = "EMPTY" | "ALREADY_EXISTS";
 
 export interface validatorInput {
+  id: string;
   commands: Command[];
   label: string;
   trigger: string;
@@ -14,6 +15,7 @@ export interface validateLabel {
 }
 
 export interface validateTrigger {
+  id: string;
   trigger: string;
   commands: Command[];
 }
