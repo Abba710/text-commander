@@ -13,7 +13,7 @@ export function MainTest() {
       data-debug="main test component"
       className="flex w-full h-full items-start justify-start px-6"
     >
-      <Card className="w-full h-full rounded-2xl border border-border/60 from-muted/40 to-transparent p-6 flex flex-col gap-6">
+      <Card className="w-full rounded-2xl border border-border/60 from-muted/40 to-transparent p-6 flex flex-col gap-6">
         <Field>
           {/* Header */}
           <div className="flex items-center gap-3 pb-1">
@@ -41,7 +41,7 @@ export function MainTest() {
           <Textarea
             id="textarea-message"
             placeholder="Type your message here."
-            className="min-h-75 resize-none"
+            className="min-h-56 resize-none"
           />
 
           <FieldDescription>

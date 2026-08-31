@@ -1,3 +1,4 @@
-import SearchTrigger from "./app-search-trigger";
+import { SearchTrigger } from "./app-search-trigger";
+import { HeaderNavigation } from "./app-navigation";
 
-export { SearchTrigger };
+export { SearchTrigger, HeaderNavigation };

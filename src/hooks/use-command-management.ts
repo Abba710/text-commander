@@ -1,13 +1,18 @@
-import type { Command } from "@/types";
-import type { validatorResult } from "@/commandengine/types/validator-types/";
+import type { Command } from "@/types/app-types";
+import type { validatorResult } from "@/types/validator-types";
 import { useCommandStore } from "@/store/commandStore";
 import { useCallback } from "react";
-import { validator } from "@/commandengine/validator";
+import { validator } from "@/domain/validator/validator";
+import { useNavigate } from "react-router";
 
 export function useCommandManagement() {
   const commands = useCommandStore((state) => state.commands);
   const addCommandToStore = useCommandStore((state) => state.addCommand);
   const editCommandInStore = useCommandStore((state) => state.updateCommand);
+  const navigate = useNavigate();
+  const removeCommandFromStore = useCommandStore(
+    (state) => state.removeCommand,
+  );
 
   const addCommand = useCallback(
     (
@@ -39,14 +44,16 @@ export function useCommandManagement() {
 
   const findCommand = useCallback(
     (id: string) => {
-      return commands.find((c) => c.id === id);
+      return commands.find((c: Command) => c.id === id);
     },
     [commands],
   );
 
   const editCommand = useCallback(
     (command: Command): validatorResult => {
-      const existingCommand = commands.find((c) => c.id === command.id);
+      const existingCommand = commands.find(
+        (c: Command) => c.id === command.id,
+      );
 
       // If the command doesn't exist, return an error
       if (!existingCommand) {
@@ -88,10 +95,21 @@ export function useCommandManagement() {
     [commands, editCommandInStore],
   );
 
+  const deleteCommand = useCallback(
+    (id: string, currentCommandId: string | undefined) => {
+      removeCommandFromStore(id);
+      if (id === currentCommandId) {
+        navigate("/");
+      }
+    },
+    [removeCommandFromStore, navigate],
+  );
+
   return {
     commands,
     addCommand,
     findCommand,
     editCommand,
+    deleteCommand,
   };
 }

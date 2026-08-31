@@ -1,4 +1,4 @@
-import type { Command } from "./types";
+import type { Command } from "./app-types";
 
 export interface commandStore {
   commands: Command[];

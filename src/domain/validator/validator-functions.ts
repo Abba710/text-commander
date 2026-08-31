@@ -1,9 +1,9 @@
-import type { validationResult } from "../types";
+import type { validationResult } from "@/types/validator-types";
 import type {
   validateLabel,
   validateTrigger,
   validateTemplate,
-} from "../types";
+} from "@/types/validator-types";
 
 export function validateLabel({ label }: validateLabel): validationResult {
   if (!label.trim()) {

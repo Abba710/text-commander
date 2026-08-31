@@ -2,7 +2,7 @@ import { MainTest, MainInfo } from "@/components/main";
 
 export function AppMain() {
   return (
-    <div className="w-full p-4 h-full p-2 flex">
+    <div className="w-full h-full p-4 flex justify-start items-start py-6">
       <div className="flex w-[80%]">
         <MainTest />
       </div>

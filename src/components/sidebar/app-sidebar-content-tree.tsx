@@ -8,9 +8,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import type { Command, CommandFolder, Tree } from "@/types";
+import type { Command, CommandFolder, Tree } from "@/types/app-types";
 import { ChevronRight, File, Folder } from "lucide-react";
 import { useNavigate } from "react-router";
+import { SidebarContextMenu } from "./app-sidebar-context-menu";
+import { useCommandManagement } from "@/hooks/use-command-management";
+import { useParams } from "react-router";
 
 function CommandLeaf({ command }: { command: Command }) {
   const navigate = useNavigate();
@@ -60,13 +63,24 @@ function CommandFolderNode({ folder }: { folder: CommandFolder }) {
 }
 
 export function SidebarContentTree({ commands, commandFolders }: Tree) {
+  const { deleteCommand } = useCommandManagement();
+  const { id } = useParams();
   return (
     <>
       {commandFolders?.map((folder) => (
-        <CommandFolderNode key={folder.id} folder={folder} />
+        <SidebarContextMenu key={folder.id} onDelete={() => {}}>
+          <CommandFolderNode folder={folder} />
+        </SidebarContextMenu>
       ))}
       {commands.map((command) => (
-        <CommandLeaf key={command.id} command={command} />
+        <SidebarContextMenu
+          key={command.id}
+          onDelete={() => {
+            deleteCommand(command.id, id);
+          }}
+        >
+          <CommandLeaf command={command} />
+        </SidebarContextMenu>
       ))}
     </>
   );

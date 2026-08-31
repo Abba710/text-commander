@@ -18,3 +18,7 @@ export interface Tree {
   commands: Command[];
   commandFolders?: CommandFolder[];
 }
+
+export type BreadcrumbHandle = {
+  crumb: string;
+};

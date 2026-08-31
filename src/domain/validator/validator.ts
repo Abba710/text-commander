@@ -3,7 +3,11 @@ import {
   validateTrigger,
   validateTemplate,
 } from "./validator-functions";
-import type { validatorInput, validatorResult, FieldError } from "../types";
+import type {
+  validatorInput,
+  validatorResult,
+  FieldError,
+} from "@/types/validator-types";
 
 export function validator({
   id,

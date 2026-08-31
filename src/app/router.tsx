@@ -1,17 +1,39 @@
-import { Routes, Route } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
+
 import App from "./app";
 import { AddPage } from "@/page/app-add-page";
 import { AppMain } from "@/components";
 import { LayoutPage } from "@/page/app-layout-page";
 
+const router = createBrowserRouter([
+  {
+    element: <App />,
+    handle: {
+      crumb: "Home",
+    },
+    children: [
+      {
+        path: "/",
+        element: <AppMain />,
+      },
+      {
+        path: "add",
+        element: <AddPage />,
+        handle: {
+          crumb: "Add",
+        },
+      },
+      {
+        path: "command/:id",
+        element: <LayoutPage />,
+        handle: {
+          crumb: "Command",
+        },
+      },
+    ],
+  },
+]);
+
 export default function Router() {
-  return (
-    <Routes>
-      <Route element={<App />}>
-        <Route path="/" element={<AppMain />} />
-        <Route path="/add" element={<AddPage />} />
-        <Route path="/command/:id" element={<LayoutPage />} />
-      </Route>
-    </Routes>
-  );
+  return <RouterProvider router={router} />;
 }

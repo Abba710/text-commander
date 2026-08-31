@@ -119,7 +119,9 @@ export function EditCommand() {
                 required
                 value={trigger}
                 onChange={(e) =>
-                  setTrigger(e.target.value.replace(/\s/g, "-").toLowerCase())
+                  setTrigger(
+                    e.target.value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase(),
+                  )
                 }
                 placeholder={fieldErrors.trigger ?? "command-name"}
                 className={`h-11 pl-6 font-mono ${fieldErrors.trigger ? "border-red-500" : ""}`}
