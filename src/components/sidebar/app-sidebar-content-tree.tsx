@@ -1,4 +1,5 @@
 import {
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -8,14 +9,19 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import type { Command, CommandFolder, Tree } from "@/types/app-types";
-import { ChevronRight, File, Folder } from "lucide-react";
-import { useNavigate } from "react-router";
+import type {
+  Tree,
+  CommandLeafProps,
+  CommandFolderNodeProps,
+} from "@/types/app-types";
+import { ChevronRight, File, Folder, EllipsisVertical } from "lucide-react";
+import { useNavigate, useParams } from "react-router";
 import { SidebarContextMenu } from "./app-sidebar-context-menu";
+import { SidebarDropdownMenu } from "./app-sidebar-dropdown-menu";
 import { useCommandManagement } from "@/hooks/use-command-management";
-import { useParams } from "react-router";
 
-function CommandLeaf({ command }: { command: Command }) {
+// Commands
+function CommandLeaf({ command, onDeleteCommand }: CommandLeafProps) {
   const navigate = useNavigate();
   return (
     <SidebarMenuItem>
@@ -26,13 +32,22 @@ function CommandLeaf({ command }: { command: Command }) {
         <File />
         {command.label}
       </SidebarMenuButton>
+      <SidebarDropdownMenu onDelete={() => onDeleteCommand(command.id)}>
+        <SidebarMenuAction showOnHover>
+          <EllipsisVertical />
+        </SidebarMenuAction>
+      </SidebarDropdownMenu>
     </SidebarMenuItem>
   );
 }
 
-function CommandFolderNode({ folder }: { folder: CommandFolder }) {
+// Commands folders
+function CommandFolderNode({
+  folder,
+  onDeleteCommand,
+  onDeleteFolder,
+}: CommandFolderNodeProps) {
   const isEmpty = folder.commands.length === 0 && folder.children.length === 0;
-
   return (
     <SidebarMenuItem>
       <Collapsible defaultOpen={false}>
@@ -49,10 +64,27 @@ function CommandFolderNode({ folder }: { folder: CommandFolder }) {
           <CollapsibleContent>
             <SidebarMenuSub>
               {folder.children.map((child) => (
-                <CommandFolderNode key={child.id} folder={child} />
+                <SidebarContextMenu
+                  key={child.id}
+                  onDelete={() => onDeleteFolder(child.id)}
+                >
+                  <CommandFolderNode
+                    folder={child}
+                    onDeleteCommand={onDeleteCommand}
+                    onDeleteFolder={onDeleteFolder}
+                  />
+                </SidebarContextMenu>
               ))}
               {folder.commands.map((command) => (
-                <CommandLeaf key={command.id} command={command} />
+                <SidebarContextMenu
+                  key={command.id}
+                  onDelete={() => onDeleteCommand(command.id)}
+                >
+                  <CommandLeaf
+                    command={command}
+                    onDeleteCommand={onDeleteCommand}
+                  />
+                </SidebarContextMenu>
               ))}
             </SidebarMenuSub>
           </CollapsibleContent>
@@ -62,24 +94,38 @@ function CommandFolderNode({ folder }: { folder: CommandFolder }) {
   );
 }
 
+// Sidebar content tree
 export function SidebarContentTree({ commands, commandFolders }: Tree) {
   const { deleteCommand } = useCommandManagement();
   const { id } = useParams();
+
+  const handleDeleteCommand = (commandId: string) =>
+    deleteCommand(commandId, id);
+  const handleDeleteFolder = () => console.log("folder deleted");
+
   return (
     <>
       {commandFolders?.map((folder) => (
-        <SidebarContextMenu key={folder.id} onDelete={() => {}}>
-          <CommandFolderNode folder={folder} />
+        <SidebarContextMenu
+          key={folder.id}
+          onDelete={() => handleDeleteFolder()}
+        >
+          <CommandFolderNode
+            folder={folder}
+            onDeleteCommand={handleDeleteCommand}
+            onDeleteFolder={handleDeleteFolder}
+          />
         </SidebarContextMenu>
       ))}
       {commands.map((command) => (
         <SidebarContextMenu
           key={command.id}
-          onDelete={() => {
-            deleteCommand(command.id, id);
-          }}
+          onDelete={() => handleDeleteCommand(command.id)}
         >
-          <CommandLeaf command={command} />
+          <CommandLeaf
+            command={command}
+            onDeleteCommand={handleDeleteCommand}
+          />
         </SidebarContextMenu>
       ))}
     </>

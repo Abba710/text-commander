@@ -22,3 +22,14 @@ export interface Tree {
 export type BreadcrumbHandle = {
   crumb: string;
 };
+
+export interface CommandLeafProps {
+  command: Command;
+  onDeleteCommand: (commandId: string) => void;
+}
+
+export interface CommandFolderNodeProps {
+  folder: CommandFolder;
+  onDeleteCommand: (commandId: string) => void;
+  onDeleteFolder: (folderId: string) => void;
+}
