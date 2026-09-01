@@ -10,6 +10,7 @@ export interface Command {
 export interface CommandFolder {
   id: string;
   label: string;
+  description: string;
   children: CommandFolder[];
   commands: Command[];
 }

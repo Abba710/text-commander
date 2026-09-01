@@ -1,4 +1,4 @@
-import type { Command } from "@/types";
+import type { Command } from "@/types/app-types";
 
 export type TriggerError = "EMPTY" | "ALREADY_EXISTS";
 

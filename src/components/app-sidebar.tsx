@@ -12,8 +12,10 @@ import {
   SidebarHeaderInfo,
   SidebarContentTree,
   SidebarFooterInfo,
+  SidebarControls,
 } from "./sidebar";
-import { useCommandStore } from "@/store/commandStore";
+import { useCommandManagement } from "@/hooks/use-command-management";
+import { useFolderManagement } from "@/hooks/use-folder-management";
 
 const data = {
   user: {
@@ -21,23 +23,11 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  tree: [
-    ["Personal..."],
-    [
-      "Work",
-      ["Sales", ["Sales Outreach"], ["Commercial Proposal"]],
-      "Leave request",
-      "Reply to Colleague",
-    ],
-    ["HR"],
-    ["Projects"],
-    "Quick Reply",
-    "Thank You",
-  ],
 };
 
 export function AppSidebar() {
-  const { commands } = useCommandStore();
+  const { commands } = useCommandManagement();
+  const { folders } = useFolderManagement();
 
   return (
     <Sidebar>
@@ -45,15 +35,26 @@ export function AppSidebar() {
         <SidebarHeaderInfo />
       </SidebarHeader>
       <SidebarContent>
+        {/* Controls */}
+        <SidebarGroup />
+        <SidebarGroupContent>
+          <SidebarMenu>
+            <SidebarControls />
+          </SidebarMenu>
+        </SidebarGroupContent>
+
+        {/* Commands tree */}
         <SidebarGroup />
         <SidebarGroupLabel>Commands</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarContentTree commands={commands} />
+            <SidebarContentTree commands={commands} commandFolders={folders} />
           </SidebarMenu>
         </SidebarGroupContent>
         <SidebarGroup />
       </SidebarContent>
+
+      {/* User info */}
       <SidebarFooter>
         <SidebarFooterInfo user={data.user} />
       </SidebarFooter>

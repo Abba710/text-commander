@@ -63,7 +63,7 @@ export function MainTest() {
             <Button
               variant="default"
               size="lg"
-              onClick={() => navigate("/add")}
+              onClick={() => navigate("/add-command")}
             >
               Add Command
             </Button>

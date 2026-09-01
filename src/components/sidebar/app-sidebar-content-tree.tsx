@@ -26,7 +26,7 @@ function CommandLeaf({ command, onDeleteCommand }: CommandLeafProps) {
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
-        onClick={() => navigate(`/command/${command.id}`)}
+        onClick={() => navigate(`/edit-command/${command.id}`)}
         className="data-[active=true]:bg-transparent"
       >
         <File />

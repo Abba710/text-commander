@@ -1,9 +1,13 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 
 import App from "./app";
-import { AddPage } from "@/page/app-add-page";
-import { AppMain } from "@/components";
-import { LayoutPage } from "@/page/app-layout-page";
+import {
+  AddFolderPage,
+  AddCommandPage,
+  EditCommandPage,
+  NotFoundPage,
+  HomePage,
+} from "@/page";
 
 const router = createBrowserRouter([
   {
@@ -14,21 +18,32 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <AppMain />,
+        element: <HomePage />,
       },
       {
-        path: "add",
-        element: <AddPage />,
+        path: "add-command",
+        element: <AddCommandPage />,
         handle: {
-          crumb: "Add",
+          crumb: "Add Command",
         },
       },
       {
-        path: "command/:id",
-        element: <LayoutPage />,
+        path: "edit-command/:id",
+        element: <EditCommandPage />,
         handle: {
-          crumb: "Command",
+          crumb: "Edit Command",
         },
+      },
+      {
+        path: "add-folder",
+        element: <AddFolderPage />,
+        handle: {
+          crumb: "Add Folder",
+        },
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
       },
     ],
   },

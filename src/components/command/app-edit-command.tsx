@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCommandManagement } from "@/hooks/use-command-management";
 import { useNavigate, useParams } from "react-router";
-import { NotFound } from "@/page/404";
+import { NotFoundPage } from "@/page/";
 import { useEffect } from "react";
 
 export function EditCommand() {
@@ -17,9 +17,9 @@ export function EditCommand() {
 
   const { id } = useParams();
 
-  if (!id) return <NotFound />;
+  if (!id) return <NotFoundPage />;
   const command = findCommand(id);
-  if (!command) return <NotFound />;
+  if (!command) return <NotFoundPage />;
 
   useEffect(() => {
     setFieldErrors({});
@@ -59,7 +59,7 @@ export function EditCommand() {
   };
 
   if (!command) {
-    return <NotFound />;
+    return <NotFoundPage />;
   }
   return (
     <div className="flex w-full h-full items-start justify-start px-6">

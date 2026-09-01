@@ -6,8 +6,11 @@ export const useCommandStore = create<commandStore>()(
   persist(
     (set) => ({
       commands: [],
+      folders: [],
       addCommand: (command) =>
         set((state) => ({ commands: [...state.commands, command] })),
+      addCommandFolder: (folder) =>
+        set((state) => ({ folders: [...state.folders, folder] })),
       removeCommand: (id) =>
         set((state) => ({
           commands: state.commands.filter((command) => command.id !== id),
