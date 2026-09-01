@@ -1,7 +1,11 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { SearchTrigger, HeaderNavigation } from "@/components/header";
+
+import {
+  SearchTrigger,
+  HeaderNavigation,
+  ThemeToggle,
+} from "@/components/header";
 
 export function AppHeader() {
   return (
@@ -11,7 +15,7 @@ export function AppHeader() {
         <Separator orientation="vertical" className="mr-2 h-7.5" />
         <HeaderNavigation />
         <SearchTrigger />
-        <Button variant="ghost" size="icon-sm"></Button>
+        <ThemeToggle />
       </div>
     </header>
   );
