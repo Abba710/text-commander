@@ -13,6 +13,7 @@ export interface CommandFolder {
   description: string;
   children: CommandFolder[];
   commands: Command[];
+  updTime?: number;
 }
 
 export interface Tree {
@@ -31,6 +32,8 @@ export interface CommandLeafProps {
 
 export interface CommandFolderNodeProps {
   folder: CommandFolder;
+  onEditCommand: (commandId: string) => void;
+  onEditFolder: (folderId: string) => void;
   onDeleteCommand: (commandId: string) => void;
   onDeleteFolder: (folderId: string) => void;
 }

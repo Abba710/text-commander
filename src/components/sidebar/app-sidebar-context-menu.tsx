@@ -12,11 +12,13 @@ import {
 interface SidebarContextMenuProps {
   children: React.ReactNode;
   onDelete: () => void;
+  onEdit: () => void;
 }
 
 export function SidebarContextMenu({
   children,
   onDelete,
+  onEdit,
 }: SidebarContextMenuProps) {
   return (
     <ContextMenu>
@@ -25,7 +27,7 @@ export function SidebarContextMenu({
       </ContextMenuTrigger>
       <ContextMenuContent>
         <ContextMenuGroup>
-          <ContextMenuItem>
+          <ContextMenuItem onClick={onEdit}>
             <PencilIcon />
             Edit
           </ContextMenuItem>

@@ -3,6 +3,7 @@ import { AddCommandPage } from "./app-add-command-page";
 import { EditCommandPage } from "./app-edit-command-page";
 import { NotFoundPage } from "./404";
 import { HomePage } from "./app-home-page";
+import { EditFolderPage } from "@/page/app-edit-folder-page";
 
 export {
   AddFolderPage,
@@ -10,4 +11,5 @@ export {
   EditCommandPage,
   NotFoundPage,
   HomePage,
+  EditFolderPage,
 };

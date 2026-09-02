@@ -7,6 +7,7 @@ import {
   EditCommandPage,
   NotFoundPage,
   HomePage,
+  EditFolderPage,
 } from "@/page";
 
 const router = createBrowserRouter([
@@ -39,6 +40,13 @@ const router = createBrowserRouter([
         element: <AddFolderPage />,
         handle: {
           crumb: "Add Folder",
+        },
+      },
+      {
+        path: "edit-folder/:id",
+        element: <EditFolderPage />,
+        handle: {
+          crumb: "Edit Folder",
         },
       },
       {
