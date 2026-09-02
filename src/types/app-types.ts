@@ -27,6 +27,7 @@ export type BreadcrumbHandle = {
 
 export interface CommandLeafProps {
   command: Command;
+  onEditCommand: (commandId: string) => void;
   onDeleteCommand: (commandId: string) => void;
 }
 

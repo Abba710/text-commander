@@ -19,9 +19,14 @@ import { useNavigate, useParams } from "react-router";
 import { SidebarContextMenu } from "./app-sidebar-context-menu";
 import { SidebarDropdownMenu } from "./app-sidebar-dropdown-menu";
 import { useCommandManagement } from "@/hooks/use-command-management";
+import { useFolderManagement } from "@/hooks/use-folder-management";
 
 // Commands
-function CommandLeaf({ command, onDeleteCommand }: CommandLeafProps) {
+function CommandLeaf({
+  command,
+  onEditCommand,
+  onDeleteCommand,
+}: CommandLeafProps) {
   const navigate = useNavigate();
   return (
     <SidebarMenuItem>
@@ -32,7 +37,10 @@ function CommandLeaf({ command, onDeleteCommand }: CommandLeafProps) {
         <File />
         {command.label}
       </SidebarMenuButton>
-      <SidebarDropdownMenu onDelete={() => onDeleteCommand(command.id)}>
+      <SidebarDropdownMenu
+        onEdit={() => onEditCommand(command.id)}
+        onDelete={() => onDeleteCommand(command.id)}
+      >
         <SidebarMenuAction showOnHover>
           <EllipsisVertical />
         </SidebarMenuAction>
@@ -88,6 +96,7 @@ function CommandFolderNode({
                 >
                   <CommandLeaf
                     command={command}
+                    onEditCommand={onEditCommand}
                     onDeleteCommand={onDeleteCommand}
                   />
                 </SidebarContextMenu>
@@ -103,6 +112,7 @@ function CommandFolderNode({
 // Sidebar content tree
 export function SidebarContentTree({ commands, commandFolders }: Tree) {
   const { deleteCommand } = useCommandManagement();
+  const { removeFolder } = useFolderManagement();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -114,7 +124,7 @@ export function SidebarContentTree({ commands, commandFolders }: Tree) {
   const handleEditFolder = (folderId: string) => {
     navigate(`edit-folder/${folderId}`);
   };
-  const handleDeleteFolder = () => console.log("folder deleted");
+  const handleDeleteFolder = (folderId: string) => removeFolder(folderId, id);
 
   return (
     <>
@@ -122,7 +132,7 @@ export function SidebarContentTree({ commands, commandFolders }: Tree) {
         <SidebarContextMenu
           key={folder.id}
           onEdit={() => handleEditFolder(folder.id)}
-          onDelete={() => handleDeleteFolder()}
+          onDelete={() => handleDeleteFolder(folder.id)}
         >
           <CommandFolderNode
             folder={folder}
@@ -141,6 +151,7 @@ export function SidebarContentTree({ commands, commandFolders }: Tree) {
         >
           <CommandLeaf
             command={command}
+            onEditCommand={handleEditCommand}
             onDeleteCommand={handleDeleteCommand}
           />
         </SidebarContextMenu>

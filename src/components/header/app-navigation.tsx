@@ -9,10 +9,11 @@ import {
 import type { BreadcrumbHandle } from "@/types/app-types";
 import { Fragment } from "react";
 
-import { useMatches } from "react-router";
+import { useMatches, useNavigate } from "react-router";
 
 export function HeaderNavigation() {
   const matches = useMatches();
+  const navigate = useNavigate();
 
   const breadcrumbs = matches.filter(
     (match) => (match.handle as BreadcrumbHandle | undefined)?.crumb,
@@ -33,9 +34,13 @@ export function HeaderNavigation() {
                 {isLast ? (
                   <BreadcrumbPage>{handle.crumb}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink href={match.pathname}>
+                  <button
+                    onClick={() => {
+                      navigate(match.pathname);
+                    }}
+                  >
                     {handle.crumb}
-                  </BreadcrumbLink>
+                  </button>
                 )}
               </BreadcrumbItem>
             </Fragment>

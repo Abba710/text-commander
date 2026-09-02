@@ -12,9 +12,11 @@ import {
 
 export function SidebarDropdownMenu({
   onDelete,
+  onEdit,
   children,
 }: {
   onDelete?: () => void;
+  onEdit?: () => void;
   children: React.ReactElement;
 }) {
   return (
@@ -22,7 +24,7 @@ export function SidebarDropdownMenu({
       <DropdownMenuTrigger render={children} />
       <DropdownMenuContent side="right" align="start" sideOffset={4}>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={onEdit}>
             <PencilIcon />
             Edit
           </DropdownMenuItem>

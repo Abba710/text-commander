@@ -1,12 +1,16 @@
 import { useCommandStore } from "@/store/commandStore";
 import type { CommandFolder } from "@/types/app-types";
 import { useCallback } from "react";
+import { useNavigate } from "react-router";
 
 export function useFolderManagement() {
   const folders = useCommandStore((state) => state.folders);
+  const navigate = useNavigate();
   const addFolderToStore = useCommandStore((state) => state.addCommandFolder);
   const editFolderInStore = useCommandStore((state) => state.editCommandFolder);
-
+  const removeFolderInStore = useCommandStore(
+    (state) => state.removeCommandFolder,
+  );
   const addFolder = useCallback(
     (label: string, description: string) => {
       const folder: CommandFolder = {
@@ -60,5 +64,15 @@ export function useFolderManagement() {
     [folders, editFolderInStore],
   );
 
-  return { folders, addFolder, findFolder, editFolder };
+  const removeFolder = useCallback(
+    (id: string, currentFolderId: string | undefined) => {
+      removeFolderInStore(id);
+      if (id === currentFolderId) {
+        navigate("/");
+      }
+    },
+    [navigate, removeFolderInStore],
+  );
+
+  return { folders, addFolder, findFolder, editFolder, removeFolder };
 }

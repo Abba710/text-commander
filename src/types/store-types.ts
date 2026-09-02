@@ -9,4 +9,5 @@ export interface commandStore {
   folders: CommandFolder[];
   addCommandFolder: (folder: CommandFolder) => void;
   editCommandFolder: (id: string, updates: Partial<CommandFolder>) => void;
+  removeCommandFolder: (id: string) => void;
 }

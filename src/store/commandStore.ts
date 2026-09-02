@@ -29,6 +29,10 @@ export const useCommandStore = create<commandStore>()(
             f.id === id ? { ...f, ...updates } : f,
           ),
         })),
+      removeCommandFolder: (id) =>
+        set((state) => ({
+          folders: state.folders.filter((f) => f.id !== id),
+        })),
     }),
     { name: "commandStore" },
   ),
