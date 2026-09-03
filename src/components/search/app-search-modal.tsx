@@ -11,9 +11,9 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { useNavigate } from "react-router";
-import { useCommandManagement } from "@/hooks/use-command-management";
-import { useFolderManagement } from "@/hooks/use-folder-management";
+
 import { Folder } from "lucide-react";
+import { useSearch } from "@/hooks/use-search";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -23,8 +23,7 @@ interface SearchModalProps {
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const navigate = useNavigate();
 
-  const { commands } = useCommandManagement();
-  const { folders } = useFolderManagement();
+  const searchQueue = useSearch();
 
   const runCommand = (callback: () => void) => {
     onClose();
@@ -39,12 +38,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
 
-          {commands.length > 0 && (
+          {searchQueue.flatCommands.length > 0 && (
             <CommandGroup heading="Commands">
-              {commands.map((command) => (
+              {searchQueue.flatCommands.map((command) => (
                 <CommandItem
                   key={command.id}
-                  value={`${command.label} ${command.trigger}`}
+                  value={`${command.id} ${command.label} ${command.trigger} ${command.template}`}
                   onSelect={() =>
                     runCommand(() => {
                       navigate(`/edit-command/${command.id}`);
@@ -60,19 +59,23 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </CommandGroup>
           )}
 
-          {commands.length > 0 && folders.length > 0 && <CommandSeparator />}
+          {searchQueue.flatCommands.length > 0 &&
+            searchQueue.flatFolders.length > 0 && <CommandSeparator />}
 
-          {folders.length > 0 && (
-            <CommandGroup heading="Folders">
-              {folders.map((folder) => (
+          {searchQueue.flatFolders.length > 0 && (
+            <CommandGroup
+              className="flex flex-col gap-2 justify-start"
+              heading="Folders"
+            >
+              {searchQueue.flatFolders.map((folder) => (
                 <CommandItem
                   key={folder.id}
-                  value={folder.label}
+                  value={`${folder.id} ${folder.label} ${folder.description}`}
                   onSelect={() =>
-                    runCommand(() => navigate(`/folders/${folder.id}`))
+                    runCommand(() => navigate(`/edit-folder/${folder.id}`))
                   }
                 >
-                  <span>
+                  <span className="flex gap-1 items-center">
                     <Folder />
                     {folder.label}
                   </span>

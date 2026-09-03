@@ -1,6 +1,6 @@
 "use client";
 
-import { PencilIcon, ShareIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, ShareIcon, Check, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,16 +9,32 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 export function SidebarDropdownMenu({
   onDelete,
   onEdit,
   children,
 }: {
-  onDelete?: () => void;
+  onDelete: () => void;
   onEdit?: () => void;
   children: React.ReactElement;
 }) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const handleDelete = () => {
+    if (confirmDelete) {
+      onDelete();
+      setConfirmDelete(false);
+      return;
+    }
+
+    setConfirmDelete(true);
+
+    setTimeout(() => {
+      setConfirmDelete(false);
+    }, 3000);
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={children} />
@@ -35,9 +51,20 @@ export function SidebarDropdownMenu({
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={onDelete} variant="destructive">
-            <TrashIcon />
-            Delete
+          <DropdownMenuItem
+            closeOnClick={false}
+            onClick={handleDelete}
+            variant="destructive"
+          >
+            {confirmDelete ? (
+              <>
+                Sure? <Check />
+              </>
+            ) : (
+              <>
+                Delete <Trash2 />
+              </>
+            )}
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

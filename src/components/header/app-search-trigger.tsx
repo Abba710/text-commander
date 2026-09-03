@@ -8,6 +8,8 @@ export function SearchTrigger() {
   const [open, setOpen] = useState(false);
   return (
     <>
+      <SearchModal isOpen={open} onClose={() => setOpen(false)} />
+
       <Button
         onClick={() => setOpen(true)}
         className="bg-background flex border-border rounded-[8px] w-86 justify-start text-foreground hover:bg-muted-foreground/5 ml-auto"
@@ -22,7 +24,6 @@ export function SearchTrigger() {
           <Keyboard size={16} className="text-muted-foreground" />
           <span className="ml-2 text-sm text-muted-foreground">CTRL + K</span>
         </div>
-        <SearchModal isOpen={open} onClose={() => setOpen(false)} />
       </Button>
     </>
   );
