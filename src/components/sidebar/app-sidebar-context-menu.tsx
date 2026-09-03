@@ -1,4 +1,4 @@
-import { PencilIcon, ShareIcon, TrashIcon } from "lucide-react";
+import { PencilIcon, ShareIcon, Trash2, Check } from "lucide-react";
 
 import {
   ContextMenu,
@@ -8,6 +8,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { useState } from "react";
 
 interface SidebarContextMenuProps {
   children: React.ReactNode;
@@ -20,6 +21,22 @@ export function SidebarContextMenu({
   onDelete,
   onEdit,
 }: SidebarContextMenuProps) {
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const handleDelete = () => {
+    if (confirmDelete) {
+      onDelete();
+      setConfirmDelete(false);
+      return;
+    }
+
+    setConfirmDelete(true);
+
+    setTimeout(() => {
+      setConfirmDelete(false);
+    }, 3000);
+  };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -38,9 +55,20 @@ export function SidebarContextMenu({
         </ContextMenuGroup>
         <ContextMenuSeparator />
         <ContextMenuGroup>
-          <ContextMenuItem onClick={onDelete} variant="destructive">
-            <TrashIcon />
-            Delete
+          <ContextMenuItem
+            closeOnClick={false}
+            onClick={handleDelete}
+            variant="destructive"
+          >
+            {confirmDelete ? (
+              <>
+                Sure? <Check />
+              </>
+            ) : (
+              <>
+                Delete <Trash2 />
+              </>
+            )}
           </ContextMenuItem>
         </ContextMenuGroup>
       </ContextMenuContent>
