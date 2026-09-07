@@ -14,12 +14,13 @@ import type {
   CommandLeafProps,
   CommandFolderNodeProps,
 } from "@/types/app-types";
-import { ChevronRight, File, Folder, EllipsisVertical } from "lucide-react";
+import { FolderOpen, File, Folder, EllipsisVertical } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { SidebarContextMenu } from "./app-sidebar-context-menu";
 import { SidebarDropdownMenu } from "./app-sidebar-dropdown-menu";
 import { useCommandManagement } from "@/hooks/use-command-management";
 import { useFolderManagement } from "@/hooks/use-folder-management";
+import { useState } from "react";
 
 // Commands
 function CommandLeaf({
@@ -58,14 +59,14 @@ function CommandFolderNode({
   onDeleteFolder,
 }: CommandFolderNodeProps) {
   const isEmpty = folder.commands.length === 0 && folder.children.length === 0;
+  const [open, setOpen] = useState(false);
   return (
     <SidebarMenuItem>
-      <Collapsible defaultOpen={false}>
+      <Collapsible open={open} onOpenChange={setOpen}>
         <CollapsibleTrigger
           render={
-            <SidebarMenuButton className="[&[data-panel-open]_.chevron]:rotate-90">
-              <ChevronRight className="chevron transition-transform" />
-              <Folder />
+            <SidebarMenuButton>
+              {open ? <FolderOpen /> : <Folder />}
               {folder.label}
             </SidebarMenuButton>
           }
