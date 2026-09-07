@@ -1,12 +1,13 @@
 import type { commandStore } from "@/types/store-types";
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
+import { defaultCommands } from "@/consts/defaultCommands";
 
 export const useCommandStore = create<commandStore>()(
   persist(
     (set) => ({
       // commands
-      commands: [],
+      commands: defaultCommands,
       addCommand: (command) =>
         set((state) => ({ commands: [...state.commands, command] })),
       removeCommand: (id) =>

@@ -9,10 +9,10 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
+  CommandShortcut,
 } from "@/components/ui/command";
 import { useNavigate } from "react-router";
-
-import { Folder } from "lucide-react";
+import { Folder, SearchX, TerminalSquare } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
 
 interface SearchModalProps {
@@ -22,38 +22,52 @@ interface SearchModalProps {
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const navigate = useNavigate();
-
   const searchQueue = useSearch();
 
   const runCommand = (callback: () => void) => {
     onClose();
     callback();
   };
+
   if (!isOpen) return null;
 
   return (
     <Command>
       <CommandDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <CommandInput placeholder="Search commands and folders..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
+        <CommandList className="max-h-[420px]">
+          <CommandEmpty className="py-8">
+            <div className="flex flex-col items-center gap-2 text-muted-foreground">
+              <SearchX className="size-8 opacity-50" />
+              <span className="text-sm">No results found.</span>
+            </div>
+          </CommandEmpty>
 
           {searchQueue.flatCommands.length > 0 && (
             <CommandGroup heading="Commands">
               {searchQueue.flatCommands.map((command) => (
                 <CommandItem
                   key={command.id}
-                  value={`${command.id} ${command.label} ${command.trigger} ${command.template}`}
+                  value={`${command.id} ${command.label}`}
                   onSelect={() =>
                     runCommand(() => {
                       navigate(`/edit-command/${command.id}`);
                     })
                   }
+                  className="gap-2"
                 >
-                  <span className="font-mono text-primary">
-                    /{command.trigger}
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-muted/50">
+                    <TerminalSquare className="size-3.5 text-muted-foreground" />
                   </span>
-                  <span className="text-muted-foreground">{command.label}</span>
+                  <div className="flex min-w-0 flex-col">
+                    <span className="truncate text-sm">{command.label}</span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      /{command.trigger}
+                    </span>
+                  </div>
+                  <CommandShortcut className="font-mono">
+                    /{command.trigger}
+                  </CommandShortcut>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -63,10 +77,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             searchQueue.flatFolders.length > 0 && <CommandSeparator />}
 
           {searchQueue.flatFolders.length > 0 && (
-            <CommandGroup
-              className="flex flex-col gap-2 justify-start"
-              heading="Folders"
-            >
+            <CommandGroup heading="Folders">
               {searchQueue.flatFolders.map((folder) => (
                 <CommandItem
                   key={folder.id}
@@ -74,11 +85,19 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   onSelect={() =>
                     runCommand(() => navigate(`/edit-folder/${folder.id}`))
                   }
+                  className="gap-2"
                 >
-                  <span className="flex gap-1 items-center">
-                    <Folder />
-                    {folder.label}
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-muted/50">
+                    <Folder className="size-3.5 text-muted-foreground" />
                   </span>
+                  <div className="flex min-w-0 flex-col">
+                    <span className="truncate text-sm">{folder.label}</span>
+                    {folder.description && (
+                      <span className="truncate text-xs text-muted-foreground">
+                        {folder.description}
+                      </span>
+                    )}
+                  </div>
                 </CommandItem>
               ))}
             </CommandGroup>
