@@ -1,38 +1,23 @@
-import type { commandStore } from "@/types/store-types";
-import { persist } from "zustand/middleware";
+import type { CommandStore } from "@/types/store-types";
+import { defaultTree } from "@/consts/defaultCommands";
 import { create } from "zustand";
-import { defaultCommands } from "@/consts/defaultCommands";
+import { persist } from "zustand/middleware";
 
-export const useCommandStore = create<commandStore>()(
+export const useCommandStore = create<CommandStore>()(
   persist(
     (set) => ({
-      // commands
-      commands: defaultCommands,
-      addCommand: (command) =>
-        set((state) => ({ commands: [...state.commands, command] })),
-      removeCommand: (id) =>
+      tree: defaultTree,
+
+      setTree: (tree) => set({ tree }),
+
+      addItem: (item) =>
         set((state) => ({
-          commands: state.commands.filter((command) => command.id !== id),
-        })),
-      updateCommand: (id, command) =>
-        set((state) => ({
-          commands: state.commands.map((c) => (c.id === id ? command : c)),
+          tree: [...state.tree, item],
         })),
 
-      // Folder
-      folders: [],
-      addCommandFolder: (folder) =>
-        set((state) => ({ folders: [...state.folders, folder] })),
-
-      editCommandFolder: (id, updates) =>
+      removeItem: (id) =>
         set((state) => ({
-          folders: state.folders.map((f) =>
-            f.id === id ? { ...f, ...updates } : f,
-          ),
-        })),
-      removeCommandFolder: (id) =>
-        set((state) => ({
-          folders: state.folders.filter((f) => f.id !== id),
+          tree: state.tree.filter((item) => item.id !== id),
         })),
     }),
     { name: "commandStore" },

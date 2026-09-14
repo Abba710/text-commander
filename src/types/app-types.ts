@@ -1,4 +1,7 @@
+export type TreeItem = Command | CommandFolder;
+
 export interface Command {
+  type: "command";
   id: string;
   label: string;
   trigger: string;
@@ -8,10 +11,11 @@ export interface Command {
 }
 
 export interface CommandFolder {
+  type: "folder";
   id: string;
   label: string;
   description: string;
-  children: CommandFolder[];
+  children: TreeItem[];
   commands: Command[];
   updTime?: number;
 }

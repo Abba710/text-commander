@@ -1,13 +1,9 @@
-import type { Command, CommandFolder } from "./app-types";
+import type { TreeItem } from "./app-types";
 
-export interface commandStore {
-  commands: Command[];
-  addCommand: (command: Command) => void;
-  removeCommand: (id: string) => void;
-  updateCommand: (id: string, command: Command) => void;
+export interface CommandStore {
+  tree: TreeItem[];
 
-  folders: CommandFolder[];
-  addCommandFolder: (folder: CommandFolder) => void;
-  editCommandFolder: (id: string, updates: Partial<CommandFolder>) => void;
-  removeCommandFolder: (id: string) => void;
+  setTree: (tree: TreeItem[]) => void;
+  addItem: (item: TreeItem) => void;
+  removeItem: (id: string) => void;
 }

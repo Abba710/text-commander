@@ -1,11 +1,21 @@
-import type { Command } from "@/types/app-types";
+import type { TreeItem } from "@/types/app-types";
 
-export const defaultCommands: Command[] = [
+export const defaultTree: TreeItem[] = [
   {
-    id: "default",
-    label: "Hello dear User",
-    trigger: "hi",
-    args: ["name"],
-    template: "Hello, {name}! This is how commander works.",
+    type: "folder",
+    id: "default-folder",
+    label: "Default",
+    description: "this is default commands",
+    children: [],
+    commands: [
+      {
+        type: "command",
+        id: "default",
+        label: "Hello dear User",
+        trigger: "hi",
+        args: ["name"],
+        template: "Hello, {name}! This is how commander works.",
+      },
+    ],
   },
 ];
