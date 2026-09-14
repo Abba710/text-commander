@@ -38,3 +38,9 @@ export interface CommandFolderNodeProps {
   onDeleteCommand: (commandId: string) => void;
   onDeleteFolder: (folderId: string) => void;
 }
+
+export interface CommandPreviewProps {
+  hasPreview: boolean;
+  trigger: string;
+  previewArgs: string[];
+}

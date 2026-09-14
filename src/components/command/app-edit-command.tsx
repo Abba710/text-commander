@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useCommandManagement } from "@/hooks/use-command-management";
 import { useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "@/page/";
+import { CommandPreview } from "./app-command-preview";
 
 export function EditCommand() {
   const { findCommand, editCommand } = useCommandManagement();
@@ -37,9 +38,6 @@ export function EditCommand() {
   }, [id, command]);
 
   const args = [...template.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]);
-  const previewArgs = [...template.matchAll(/\{([^{}]+)\}/g)].map(
-    (match) => match[1],
-  );
 
   const handleSaveClick = () => {
     if (!id) return;
@@ -69,10 +67,6 @@ export function EditCommand() {
   const templateInputClass = `min-h-56 max-w-300 resize-none flex-1 ${templateBorderClass[String(Boolean(fieldErrors.template)) as "true" | "false"]}`;
 
   const hasPreview = Boolean(trigger || template);
-  const previewText =
-    previewArgs.length > 0
-      ? previewArgs.map((arg) => `{${arg}}`).join(" ")
-      : template || "Command text will appear here";
 
   if (!id || !command) {
     return <NotFoundPage />;
@@ -179,21 +173,11 @@ export function EditCommand() {
         </div>
 
         {/* Preview */}
-        {hasPreview && (
-          <div className="rounded-xl max-w-300 border border-dashed border-border/70 bg-muted/30 px-4 py-3">
-            <p className="text-xs font-medium text-muted-foreground mb-1.5">
-              Preview
-            </p>
-            <div className="flex items-start gap-2 text-sm">
-              <span className="font-mono font-medium text-primary shrink-0 rounded-md border border-border/60 bg-background px-1.5 py-0.5">
-                /{trigger || "command-name"}
-              </span>
-              <span className="text-muted-foreground truncate pt-0.5">
-                {previewText}
-              </span>
-            </div>
-          </div>
-        )}
+        <CommandPreview
+          hasPreview={hasPreview}
+          trigger={trigger}
+          previewArgs={args}
+        />
       </Card>
     </div>
   );

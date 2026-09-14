@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCommandManagement } from "@/hooks/use-command-management";
 import { useNavigate } from "react-router";
+import { CommandPreview } from "./app-command-preview";
 
 export function CommandInput() {
   const navigate = useNavigate();
@@ -24,9 +25,6 @@ export function CommandInput() {
   const [template, setTemplate] = useState("");
 
   const args = [...template.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]);
-  const previewArgs = [...template.matchAll(/\{([^{}]+)\}/g)].map(
-    (match) => match[1],
-  );
 
   const { addCommand } = useCommandManagement();
 
@@ -58,10 +56,6 @@ export function CommandInput() {
   const templateInputClass = `min-h-56 max-w-300 resize-none flex-1 ${templateBorderClass[String(Boolean(fieldErrors.template)) as "true" | "false"]}`;
 
   const hasPreview = Boolean(trigger || template);
-  const previewText =
-    previewArgs.length > 0
-      ? previewArgs.map((arg) => `{${arg}}`).join(" ")
-      : template || "Command text will appear here";
 
   return (
     <div className="flex w-full h-full items-start justify-start px-6">
@@ -164,21 +158,11 @@ export function CommandInput() {
         </div>
 
         {/* Preview */}
-        {hasPreview && (
-          <div className="rounded-xl max-w-300 border border-dashed border-border/70 bg-muted/30 px-4 py-3">
-            <p className="text-xs font-medium text-muted-foreground mb-1.5">
-              Preview
-            </p>
-            <div className="flex items-start gap-2 text-sm">
-              <span className="font-mono font-medium text-primary shrink-0 rounded-md border border-border/60 bg-background px-1.5 py-0.5">
-                /{trigger || "command-name"}
-              </span>
-              <span className="text-muted-foreground truncate pt-0.5">
-                {previewText}
-              </span>
-            </div>
-          </div>
-        )}
+        <CommandPreview
+          hasPreview={hasPreview}
+          trigger={trigger}
+          previewArgs={args}
+        ></CommandPreview>
       </Card>
     </div>
   );
