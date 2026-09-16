@@ -1,36 +1,36 @@
-import type { Command } from "@/types/app-types";
+import type { TreeItem } from "@/types/app-types";
 
 export type TriggerError = "EMPTY" | "ALREADY_EXISTS";
 
-export interface validatorInput {
+export interface ValidatorInput {
   id: string;
-  commands: Command[];
+  tree: TreeItem[];
   label: string;
   trigger: string;
   template: string;
 }
 
-export interface validateLabel {
+export interface ValidateLabel {
   label: string;
 }
 
-export interface validateTrigger {
+export interface ValidateTrigger {
   id: string;
   trigger: string;
-  commands: Command[];
+  tree: TreeItem[];
 }
 
-export interface validateTemplate {
+export interface ValidateTemplate {
   template: string;
 }
 
-export type validationResult =
+export type ValidationResult =
   | { success: false; error: TriggerError }
   | {
       success: true;
     };
 
-export type validatorResult =
+export type ValidatorResult =
   { success: false; errors: FieldError[] } | { success: true };
 
 export type FieldError = {

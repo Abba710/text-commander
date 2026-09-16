@@ -10,7 +10,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import type {
-  Tree,
   CommandLeafProps,
   CommandFolderNodeProps,
 } from "@/types/app-types";
@@ -18,8 +17,7 @@ import { FolderOpen, File, Folder, EllipsisVertical } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { SidebarContextMenu } from "./app-sidebar-context-menu";
 import { SidebarDropdownMenu } from "./app-sidebar-dropdown-menu";
-import { useCommandManagement } from "@/hooks/use-command-management";
-import { useFolderManagement } from "@/hooks/use-folder-management";
+import { useTreeManagement } from "@/hooks/use-tree-management";
 import { useState } from "react";
 
 // Commands
@@ -58,7 +56,7 @@ function CommandFolderNode({
   onDeleteCommand,
   onDeleteFolder,
 }: CommandFolderNodeProps) {
-  const isEmpty = folder.commands.length === 0 && folder.children.length === 0;
+  const isEmpty = folder.children.length === 0;
   const [open, setOpen] = useState(false);
   return (
     <SidebarMenuItem>
@@ -80,26 +78,30 @@ function CommandFolderNode({
                   onEdit={() => onEditCommand(child.id)}
                   onDelete={() => onDeleteCommand(child.id)}
                 >
-                  <CommandFolderNode
-                    folder={child}
-                    onEditCommand={onEditCommand}
-                    onEditFolder={onEditFolder}
-                    onDeleteCommand={onDeleteCommand}
-                    onDeleteFolder={onDeleteFolder}
-                  />
+                  {child.type === "folder" && (
+                    <CommandFolderNode
+                      folder={child}
+                      onEditCommand={onEditCommand}
+                      onEditFolder={onEditFolder}
+                      onDeleteCommand={onDeleteCommand}
+                      onDeleteFolder={onDeleteFolder}
+                    />
+                  )}
                 </SidebarContextMenu>
               ))}
-              {folder.commands.map((command) => (
+              {folder.children.map((command) => (
                 <SidebarContextMenu
                   key={command.id}
                   onEdit={() => onEditCommand(command.id)}
                   onDelete={() => onDeleteCommand(command.id)}
                 >
-                  <CommandLeaf
-                    command={command}
-                    onEditCommand={onEditCommand}
-                    onDeleteCommand={onDeleteCommand}
-                  />
+                  {command.type === "command" && (
+                    <CommandLeaf
+                      command={command}
+                      onEditCommand={onEditCommand}
+                      onDeleteCommand={onDeleteCommand}
+                    />
+                  )}
                 </SidebarContextMenu>
               ))}
             </SidebarMenuSub>
@@ -111,52 +113,58 @@ function CommandFolderNode({
 }
 
 // Sidebar content tree
-export function SidebarContentTree({ commands, commandFolders }: Tree) {
-  const { deleteCommand } = useCommandManagement();
-  const { removeFolder } = useFolderManagement();
+export function SidebarContentTree() {
+  const { tree, removeTreeItem } = useTreeManagement();
+
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const handleDeleteCommand = (commandId: string) =>
-    deleteCommand(commandId, id);
+  const handleDelete = (currentItemId: string) =>
+    removeTreeItem(currentItemId, id);
   const handleEditCommand = (commandId: string) => {
     navigate(`edit-command/${commandId}`);
   };
   const handleEditFolder = (folderId: string) => {
     navigate(`edit-folder/${folderId}`);
   };
-  const handleDeleteFolder = (folderId: string) => removeFolder(folderId, id);
 
   return (
     <>
-      {commandFolders?.map((folder) => (
-        <SidebarContextMenu
-          key={folder.id}
-          onEdit={() => handleEditFolder(folder.id)}
-          onDelete={() => handleDeleteFolder(folder.id)}
-        >
-          <CommandFolderNode
-            folder={folder}
-            onEditCommand={handleEditCommand}
-            onEditFolder={handleEditFolder}
-            onDeleteCommand={handleDeleteCommand}
-            onDeleteFolder={handleDeleteFolder}
-          />
-        </SidebarContextMenu>
-      ))}
-      {commands.map((command) => (
-        <SidebarContextMenu
-          key={command.id}
-          onEdit={() => handleEditCommand(command.id)}
-          onDelete={() => handleDeleteCommand(command.id)}
-        >
-          <CommandLeaf
-            command={command}
-            onEditCommand={handleEditCommand}
-            onDeleteCommand={handleDeleteCommand}
-          />
-        </SidebarContextMenu>
-      ))}
+      {tree.map(
+        (folder) =>
+          folder.type === "folder" && (
+            <SidebarContextMenu
+              key={folder.id}
+              onEdit={() => handleEditFolder(folder.id)}
+              onDelete={() => handleDelete(folder.id)}
+            >
+              <CommandFolderNode
+                folder={folder}
+                onEditCommand={handleEditCommand}
+                onEditFolder={handleEditFolder}
+                onDeleteCommand={handleDelete}
+                onDeleteFolder={handleDelete}
+              />
+            </SidebarContextMenu>
+          ),
+      )}
+
+      {tree.map(
+        (command) =>
+          command.type === "command" && (
+            <SidebarContextMenu
+              key={command.id}
+              onEdit={() => handleEditCommand(command.id)}
+              onDelete={() => handleDelete(command.id)}
+            >
+              <CommandLeaf
+                command={command}
+                onEditCommand={handleEditCommand}
+                onDeleteCommand={handleDelete}
+              />
+            </SidebarContextMenu>
+          ),
+      )}
     </>
   );
 }

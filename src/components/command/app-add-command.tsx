@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useCommandManagement } from "@/hooks/use-command-management";
+import { useTreeManagement } from "@/hooks/use-tree-management";
 import { useNavigate } from "react-router";
 import { CommandPreview } from "./app-command-preview";
 
@@ -26,7 +26,7 @@ export function CommandInput() {
 
   const args = [...template.matchAll(/\{([^{}]+)\}/g)].map((match) => match[1]);
 
-  const { addCommand } = useCommandManagement();
+  const { addCommand } = useTreeManagement();
 
   const handleSaveClick = () => {
     const result = addCommand(label, trigger, args, template);

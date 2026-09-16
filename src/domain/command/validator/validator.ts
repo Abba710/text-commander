@@ -4,18 +4,18 @@ import {
   validateTemplate,
 } from "./validator-functions";
 import type {
-  validatorInput,
-  validatorResult,
+  ValidatorInput,
+  ValidatorResult,
   FieldError,
 } from "@/types/validator-types";
 
 export function validator({
   id,
-  commands,
+  tree,
   label,
   trigger,
   template,
-}: validatorInput): validatorResult {
+}: ValidatorInput): ValidatorResult {
   const errors: FieldError[] = [];
 
   const labelResult = validateLabel({ label });
@@ -23,7 +23,7 @@ export function validator({
     errors.push({ field: "label", error: labelResult.error });
   }
 
-  const triggerResult = validateTrigger({ id, trigger, commands });
+  const triggerResult = validateTrigger({ id, trigger, tree });
   if (!triggerResult.success) {
     errors.push({ field: "trigger", error: triggerResult.error });
   }

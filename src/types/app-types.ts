@@ -16,7 +16,6 @@ export interface CommandFolder {
   label: string;
   description: string;
   children: TreeItem[];
-  commands: Command[];
   updTime?: number;
 }
 

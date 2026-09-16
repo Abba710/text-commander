@@ -1,58 +1,43 @@
-import { useCommandManagement } from "./use-command-management";
-import { useFolderManagement } from "./use-folder-management";
-import type { Command, CommandFolder } from "@/types/app-types";
+import { useTreeManagement } from "./use-tree-management";
+import type { Command, CommandFolder, TreeItem } from "@/types/app-types";
 import { useMemo } from "react";
 
 export function useSearch() {
-  const { folders } = useFolderManagement();
-  const { commands } = useCommandManagement();
+  const { tree } = useTreeManagement();
 
-  const flattenCommands = (
-    commands: Command[],
-    folders: CommandFolder[],
-  ): Command[] => {
-    const flattened: Command[] = [];
+  const flattenTree = (
+    tree: TreeItem[],
+  ): {
+    flattenedCommands: Command[];
+    flattenedFolders: CommandFolder[];
+  } => {
+    const flattenedCommands: Command[] = [];
+    const flattenedFolders: CommandFolder[] = [];
 
-    const traverseFolders = (items: CommandFolder[]) => {
+    const traverseTree = (items: TreeItem[]) => {
       items.forEach((item) => {
-        if (item.children && item.children.length > 0) {
-          traverseFolders(item.children);
-        }
-        if (item.commands && item.commands.length > 0) {
-          flattened.push(...item.commands);
+        if (item.type === "command") {
+          flattenedCommands.push(item);
+        } else {
+          flattenedFolders.push(item);
+          traverseTree(item.children);
         }
       });
     };
-    const traverseCommands = (items: Command[]) => {
-      flattened.push(...items);
+
+    traverseTree(tree);
+
+    return {
+      flattenedCommands,
+      flattenedFolders,
     };
-
-    traverseCommands(commands);
-    traverseFolders(folders);
-    return flattened;
-  };
-
-  const flattenFolders = (folders: CommandFolder[]): CommandFolder[] => {
-    const flattened: CommandFolder[] = [];
-
-    const traverseFolders = (items: CommandFolder[]) => {
-      items.forEach((item) => {
-        flattened.push(item);
-        if (item.children && item.children.length > 0) {
-          traverseFolders(item.children);
-        }
-      });
-    };
-    traverseFolders(folders);
-    return flattened;
   };
 
   const searchQueue = useMemo(() => {
-    const flatCommands = flattenCommands(commands, folders);
-    const flatFolders = flattenFolders(folders);
+    const flatTree = flattenTree(tree);
 
-    return { flatCommands, flatFolders };
-  }, [commands, folders]);
+    return flatTree;
+  }, [tree]);
 
   return searchQueue;
 }

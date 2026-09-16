@@ -14,11 +14,6 @@ export const useCommandStore = create<CommandStore>()(
         set((state) => ({
           tree: [...state.tree, item],
         })),
-
-      removeItem: (id) =>
-        set((state) => ({
-          tree: state.tree.filter((item) => item.id !== id),
-        })),
     }),
     { name: "commandStore" },
   ),

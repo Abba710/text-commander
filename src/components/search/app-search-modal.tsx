@@ -43,9 +43,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </div>
           </CommandEmpty>
 
-          {searchQueue.flatCommands.length > 0 && (
+          {searchQueue.flattenedCommands.length > 0 && (
             <CommandGroup heading="Commands">
-              {searchQueue.flatCommands.map((command) => (
+              {searchQueue.flattenedCommands.map((command) => (
                 <CommandItem
                   key={command.id}
                   value={`${command.id} ${command.label}`}
@@ -73,12 +73,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </CommandGroup>
           )}
 
-          {searchQueue.flatCommands.length > 0 &&
-            searchQueue.flatFolders.length > 0 && <CommandSeparator />}
+          {searchQueue.flattenedCommands.length > 0 &&
+            searchQueue.flattenedCommands.length > 0 && <CommandSeparator />}
 
-          {searchQueue.flatFolders.length > 0 && (
+          {searchQueue.flattenedFolders.length > 0 && (
             <CommandGroup heading="Folders">
-              {searchQueue.flatFolders.map((folder) => (
+              {searchQueue.flattenedFolders.map((folder) => (
                 <CommandItem
                   key={folder.id}
                   value={`${folder.id} ${folder.label} ${folder.description}`}

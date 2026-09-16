@@ -8,13 +8,13 @@ import { Textarea } from "../ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
-import { useFolderManagement } from "@/hooks/use-folder-management";
+import { useTreeManagement } from "@/hooks/use-tree-management";
 
 export function FolderInput() {
   const navigate = useNavigate();
   const [label, setLabel] = useState("");
   const [description, setDescription] = useState("");
-  const { addFolder } = useFolderManagement();
+  const { addFolder } = useTreeManagement();
 
   const handleSaveClick = () => {
     addFolder(label, description);

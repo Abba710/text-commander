@@ -7,17 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useCommandManagement } from "@/hooks/use-command-management";
+import { useTreeManagement } from "@/hooks/use-tree-management";
 import { useNavigate, useParams } from "react-router";
 import { NotFoundPage } from "@/page/";
 import { CommandPreview } from "./app-command-preview";
 
 export function EditCommand() {
-  const { findCommand, editCommand } = useCommandManagement();
+  const { findItem, editCommand } = useTreeManagement();
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const command = id ? findCommand(id) : undefined;
+  const command = id ? findItem(id) : undefined;
 
   const errorMessages = {
     EMPTY: "Field cannot be empty",
@@ -25,12 +25,19 @@ export function EditCommand() {
   };
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [label, setLabel] = useState(command?.label ?? "");
-  const [trigger, setTrigger] = useState(command?.trigger ?? "");
-  const [template, setTemplate] = useState(command?.template ?? "");
+
+  const [label, setLabel] = useState(
+    command && command.type === "command" ? command.label : "",
+  );
+  const [trigger, setTrigger] = useState(
+    command && command.type === "command" ? command.trigger : "",
+  );
+  const [template, setTemplate] = useState(
+    command && command.type === "command" ? command.template : "",
+  );
 
   useEffect(() => {
-    if (!command) return;
+    if (!command || command.type !== "command") return;
     setFieldErrors({});
     setLabel(command.label);
     setTrigger(command.trigger);
@@ -41,7 +48,8 @@ export function EditCommand() {
 
   const handleSaveClick = () => {
     if (!id) return;
-    const result = editCommand({ id, label, trigger, args, template });
+    const type = "command";
+    const result = editCommand({ type, id, label, trigger, args, template });
     if (!result.success) {
       const next: Record<string, string> = {};
       for (const { field, error } of result.errors) {

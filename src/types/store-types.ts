@@ -5,5 +5,4 @@ export interface CommandStore {
 
   setTree: (tree: TreeItem[]) => void;
   addItem: (item: TreeItem) => void;
-  removeItem: (id: string) => void;
 }

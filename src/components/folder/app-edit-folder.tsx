@@ -8,15 +8,19 @@ import { Textarea } from "../ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router";
-import { useFolderManagement } from "@/hooks/use-folder-management";
+import { useTreeManagement } from "@/hooks/use-tree-management";
 import { NotFoundPage } from "@/page";
 
 export function EditFolder() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { editFolder, findFolder } = useFolderManagement();
+  const { editFolder, findItem } = useTreeManagement();
+  const existingFolder = id ? findItem(id) : undefined;
+  console.log(existingFolder, "this is fodler");
 
-  const existingFolder = id ? findFolder(id) : undefined;
+  if (existingFolder?.type !== "folder") {
+    return <NotFoundPage />;
+  }
 
   const [label, setLabel] = useState("");
   const [description, setDescription] = useState("");

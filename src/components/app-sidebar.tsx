@@ -14,8 +14,6 @@ import {
   SidebarFooterInfo,
   SidebarControls,
 } from "./sidebar";
-import { useCommandManagement } from "@/hooks/use-command-management";
-import { useFolderManagement } from "@/hooks/use-folder-management";
 
 const data = {
   user: {
@@ -26,9 +24,6 @@ const data = {
 };
 
 export function AppSidebar() {
-  const { commands } = useCommandManagement();
-  const { folders } = useFolderManagement();
-
   return (
     <Sidebar>
       <SidebarHeader>
@@ -48,7 +43,7 @@ export function AppSidebar() {
         <SidebarGroupLabel>Commands</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarContentTree commands={commands} commandFolders={folders} />
+            <SidebarContentTree />
           </SidebarMenu>
         </SidebarGroupContent>
         <SidebarGroup />

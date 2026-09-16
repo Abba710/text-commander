@@ -3,14 +3,13 @@ import type { TreeItem } from "@/types/app-types";
 export const defaultTree: TreeItem[] = [
   {
     type: "folder",
-    id: "default-folder",
+    id: "0",
     label: "Default",
     description: "this is default commands",
-    children: [],
-    commands: [
+    children: [
       {
         type: "command",
-        id: "default",
+        id: "1",
         label: "Hello dear User",
         trigger: "hi",
         args: ["name"],
