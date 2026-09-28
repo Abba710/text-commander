@@ -158,6 +158,7 @@ export function useTreeManagement() {
 
   return {
     tree,
+    setTree,
     addCommand,
     findItem,
     editCommand,

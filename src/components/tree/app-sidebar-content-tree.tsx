@@ -25,34 +25,30 @@ export function SidebarContentTree() {
     <>
       <DndProvider>
         {tree.map((item, index) => (
-          <Sortable key={item.id} id={item.id} index={index}>
+          <Sortable key={item.id} id={item.id} group={"1ROOT"} index={index}>
             {item.type === "folder" ? (
               <SidebarContextMenu
                 onEdit={() => handleEditFolder(item.id)}
                 onDelete={() => handleDelete(item.id)}
               >
-                <div>
-                  <CommandFolderNode
-                    folder={item}
-                    onEditCommand={handleEditCommand}
-                    onEditFolder={handleEditFolder}
-                    onDeleteCommand={handleDelete}
-                    onDeleteFolder={handleDelete}
-                  />
-                </div>
+                <CommandFolderNode
+                  folder={item}
+                  onEditCommand={handleEditCommand}
+                  onEditFolder={handleEditFolder}
+                  onDeleteCommand={handleDelete}
+                  onDeleteFolder={handleDelete}
+                />
               </SidebarContextMenu>
             ) : (
               <SidebarContextMenu
                 onEdit={() => handleEditCommand(item.id)}
                 onDelete={() => handleDelete(item.id)}
               >
-                <div>
-                  <CommandLeaf
-                    command={item}
-                    onEditCommand={handleEditCommand}
-                    onDeleteCommand={handleDelete}
-                  />
-                </div>
+                <CommandLeaf
+                  command={item}
+                  onEditCommand={handleEditCommand}
+                  onDeleteCommand={handleDelete}
+                />
               </SidebarContextMenu>
             )}
           </Sortable>

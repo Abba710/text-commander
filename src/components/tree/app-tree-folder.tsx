@@ -50,7 +50,12 @@ export function CommandFolderNode({
           <CollapsibleContent>
             <SidebarMenuSub>
               {folder.children.map((child, index) => (
-                <Sortable key={child.id} id={child.id} index={index}>
+                <Sortable
+                  key={child.id}
+                  id={child.id}
+                  group={folder.id}
+                  index={index}
+                >
                   <SidebarContextMenu
                     key={child.id}
                     onEdit={() => onEditCommand(child.id)}
