@@ -7,6 +7,11 @@ export interface DraggableItemProps {
   children: ReactNode;
 }
 
+export interface DropableItemProps {
+  id: string;
+  children: ReactNode;
+}
+
 export interface DndProviderProps {
   children: ReactNode;
 }

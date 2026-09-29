@@ -46,7 +46,7 @@ export function CommandFolderNode({
             <EllipsisVertical />
           </SidebarMenuAction>
         </SidebarDropdownMenu>
-        {!isEmpty && (
+        {!isEmpty ? (
           <CollapsibleContent>
             <SidebarMenuSub>
               {folder.children.map((child, index) => (
@@ -80,6 +80,18 @@ export function CommandFolderNode({
                 </Sortable>
               ))}
             </SidebarMenuSub>
+          </CollapsibleContent>
+        ) : (
+          <CollapsibleContent>
+            <Sortable
+              key={folder.id}
+              id={folder.id}
+              group={folder.id}
+              index={0}
+            >
+              {" "}
+              <SidebarMenuSub>Drop items here</SidebarMenuSub>
+            </Sortable>
           </CollapsibleContent>
         )}
       </Collapsible>

@@ -17,6 +17,7 @@ export function Sortable({ id, index, group, children }: DraggableItemProps) {
     index,
     element,
     handle: handleRef,
+    type: "item",
     group,
     collisionPriority: CollisionPriority.Normal,
     collisionDetector: shapeIntersection,

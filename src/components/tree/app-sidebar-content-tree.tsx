@@ -53,6 +53,11 @@ export function SidebarContentTree() {
             )}
           </Sortable>
         ))}
+        {tree.length === 1 && (
+          <Sortable key={"1ROOT"} id="1ROOT" group="1ROOT" index={1}>
+            <div className="h-1"></div>
+          </Sortable>
+        )}
       </DndProvider>
     </>
   );

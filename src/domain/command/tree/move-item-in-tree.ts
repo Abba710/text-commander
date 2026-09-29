@@ -55,47 +55,40 @@ export function moveItemInTree(
   return addToFolder(groupId, removedItem, treeWithoutItem, index);
 }
 
+function insertAt(list: TreeItem[], item: TreeItem, index: number): TreeItem[] {
+  const safeIndex = Math.max(0, Math.min(index, list.length));
+  return [...list.slice(0, safeIndex), item, ...list.slice(safeIndex)];
+}
+
 function addToFolder(
   groupId: string,
   item: TreeItem,
   tree: TreeItem[],
   index: number,
 ): TreeItem[] {
+  if (groupId === "1ROOT") {
+    return insertAt(tree, item, index);
+  }
+
   for (let i = 0; i < tree.length; i++) {
     const current = tree[i];
+    if (current.type !== "folder") continue;
 
-    if (groupId === "1ROOT") {
-      return [...tree.slice(0, index), item, ...tree.slice(index)];
-    }
-
-    if (current.id === groupId && current.type === "folder") {
+    if (current.id === groupId) {
       return [
         ...tree.slice(0, i),
-        {
-          ...current,
-          children: [
-            ...current.children.slice(0, index),
-            item,
-            ...current.children.slice(index),
-          ],
-        },
+        { ...current, children: insertAt(current.children, item, index) },
         ...tree.slice(i + 1),
       ];
     }
 
-    if (current.type === "folder") {
-      const newChildren = addToFolder(groupId, item, current.children, index);
-
-      if (newChildren !== current.children) {
-        return [
-          ...tree.slice(0, i),
-          {
-            ...current,
-            children: newChildren,
-          },
-          ...tree.slice(i + 1),
-        ];
-      }
+    const newChildren = addToFolder(groupId, item, current.children, index);
+    if (newChildren !== current.children) {
+      return [
+        ...tree.slice(0, i),
+        { ...current, children: newChildren },
+        ...tree.slice(i + 1),
+      ];
     }
   }
 
