@@ -85,11 +85,10 @@ export function CommandFolderNode({
           <CollapsibleContent>
             <Sortable
               key={folder.id}
-              id={folder.id}
+              id={`empty-${folder.id}`}
               group={folder.id}
               index={0}
             >
-              {" "}
               <SidebarMenuSub>Drop items here</SidebarMenuSub>
             </Sortable>
           </CollapsibleContent>
