@@ -1,0 +1,27 @@
+{
+  "name": "Text commander: reusable text commands",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "description": "Automate repetitive messages with reusable text commands. Create once, use anywhere, and stop copy-pasting the same text.",
+  "permissions": [],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidebar.html"
+  },
+  "action": {
+    "default_title": "Text Commander"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content_script.tsx"]
+    }
+  ],
+  "host_permissions": ["<all_urls>"],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

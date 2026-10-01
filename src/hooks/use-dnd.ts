@@ -2,7 +2,6 @@ import { useCallback, useRef } from "react";
 import { useTreeManagement } from "./use-tree-management";
 import type { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/dom";
 import { isSortable } from "@dnd-kit/react/sortable";
-import { move } from "@dnd-kit/helpers";
 import { moveItemInTree } from "@/domain/command/tree/move-item-in-tree";
 
 export function useDnd() {
@@ -26,7 +25,6 @@ export function useDnd() {
 
       const item = findItem(source.id as string);
       if (!item) return;
-
       setTree(moveItemInTree(item, source.group as string, tree, source.index));
     },
     [tree, findItem, setTree],
@@ -42,12 +40,13 @@ export function useDnd() {
       const { source } = event.operation;
       if (!isSortable(source)) return;
 
-      // Кросс-лист уже применён в onDragOver
-      if (source.initialGroup !== source.group) return;
+      // cross list already applied in onDragOver
+      const item = findItem(source.id as string);
 
-      setTree(move(tree, event));
+      if (!item) return;
+      setTree(moveItemInTree(item, source.group as string, tree, source.index));
     },
-    [tree, setTree],
+    [tree, setTree, findItem],
   );
 
   return { handleDragStart, handleDragOver, handleDragEnd };

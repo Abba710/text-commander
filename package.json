@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
+    "@crxjs/vite-plugin": "^3.0.0",
     "@dnd-kit/abstract": "^0.5.0",
     "@dnd-kit/collision": "^0.5.0",
     "@dnd-kit/dom": "^0.5.0",
@@ -36,6 +37,7 @@
     "@eslint/js": "^10.0.1",
     "@rolldown/plugin-babel": "^0.2.3",
     "@types/babel__core": "^7.20.5",
+    "@types/chrome": "^0.3.4",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",

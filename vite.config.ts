@@ -3,6 +3,8 @@ import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "node:path";
+import { crx } from "@crxjs/vite-plugin";
+import manifest from "./manifest.json" with { type: "json" };
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -10,9 +12,6 @@ export default defineConfig({
     rolldownOptions: {
       input: {
         app: resolve(import.meta.dirname, "index.html"),
-        popup: resolve(import.meta.dirname, "popup.html"),
-        sidebar: resolve(import.meta.dirname, "sidebar.html"),
-        options: resolve(import.meta.dirname, "options.html"),
       },
     },
   },
@@ -20,6 +19,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     babel({ presets: [reactCompilerPreset()] }),
+    crx({ manifest }),
   ],
   resolve: {
     alias: {

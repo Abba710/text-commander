@@ -58,8 +58,8 @@ export function CommandFolderNode({
                 >
                   <SidebarContextMenu
                     key={child.id}
-                    onEdit={() => onEditCommand(child.id)}
-                    onDelete={() => onDeleteCommand(child.id)}
+                    onEdit={() => onEditFolder(child.id)}
+                    onDelete={() => onEditFolder(child.id)}
                   >
                     {child.type === "folder" ? (
                       <CommandFolderNode
@@ -70,11 +70,17 @@ export function CommandFolderNode({
                         onDeleteFolder={onDeleteFolder}
                       />
                     ) : (
-                      <CommandLeaf
-                        command={child}
-                        onEditCommand={onEditCommand}
-                        onDeleteCommand={onDeleteCommand}
-                      />
+                      <SidebarContextMenu
+                        key={child.id}
+                        onEdit={() => onEditCommand(child.id)}
+                        onDelete={() => onDeleteCommand(child.id)}
+                      >
+                        <CommandLeaf
+                          command={child}
+                          onEditCommand={onEditCommand}
+                          onDeleteCommand={onDeleteCommand}
+                        />
+                      </SidebarContextMenu>
                     )}
                   </SidebarContextMenu>
                 </Sortable>
