@@ -10,14 +10,10 @@ import { Button } from "@/components/ui/button";
 import { useTreeManagement } from "@/hooks/use-tree-management";
 import { useNavigate } from "react-router";
 import { CommandPreview } from "./app-command-preview";
+import { ERROR_MESSAGES } from "@/consts/ERRORS";
 
 export function CommandInput() {
   const navigate = useNavigate();
-
-  const errorMessages = {
-    EMPTY: "Field cannot be empty",
-    ALREADY_EXISTS: "Trigger already exists. Choose a different one",
-  };
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [label, setLabel] = useState("");
@@ -33,7 +29,7 @@ export function CommandInput() {
     if (!result.success) {
       const next: Record<string, string> = {};
       for (const { field, error } of result.errors) {
-        next[field] = errorMessages[error];
+        next[field] = ERROR_MESSAGES[error];
       }
       setFieldErrors(next);
     } else {
@@ -48,7 +44,7 @@ export function CommandInput() {
   };
 
   const labelInputClass = `h-11 ${inputBorderClass[String(Boolean(fieldErrors.label)) as "true" | "false"]}`;
-  const triggerInputClass = `h-11 pl-6 font-mono ${inputBorderClass[String(Boolean(fieldErrors.trigger)) as "true" | "false"]}`;
+  const triggerInputClass = `h-11 font-mono ${inputBorderClass[String(Boolean(fieldErrors.trigger)) as "true" | "false"]}`;
   const templateBorderClass = {
     true: "border border-destructive focus-visible:ring-destructive/20",
     false: "",
@@ -108,15 +104,12 @@ export function CommandInput() {
               Trigger
             </FieldLabel>
             <div className="relative">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm font-mono text-muted-foreground">
-                /
-              </span>
               <Input
                 required
                 value={trigger}
                 onChange={(e) =>
                   setTrigger(
-                    e.target.value.replace(/[^a-zA-Z0-9]/g, "").toLowerCase(),
+                    e.target.value.replace(/(?!^)\//g, "").toLowerCase(),
                   )
                 }
                 placeholder="command-name"

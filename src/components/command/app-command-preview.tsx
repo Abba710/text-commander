@@ -18,7 +18,7 @@ export function CommandPreview({
           </p>
           <div className="flex items-start gap-2 text-sm">
             <span className="font-mono font-medium text-primary shrink-0 rounded-md border border-border/60 bg-background px-1.5 py-0.5">
-              /{trigger || "command-name"}
+              {trigger || "command-name"}
             </span>
             <span className="text-muted-foreground truncate pt-0.5">
               {previewText}

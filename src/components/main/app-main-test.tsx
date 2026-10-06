@@ -4,9 +4,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import { Card } from "../ui/card";
+import { useState } from "react";
+import { AutoComplete } from "@/components/autocomplite/app-auto-complite";
 
 export function MainTest() {
   const navigate = useNavigate();
+  const [value, setValue] = useState("");
 
   return (
     <div
@@ -37,12 +40,18 @@ export function MainTest() {
             </div>
           </div>
 
+          <AutoComplete value={value} />
           {/* Test area */}
           <Textarea
             id="textarea-message"
+            value={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+            }}
             placeholder="Type your message here."
             className="min-h-56 resize-none rounded-xl border-border/60 bg-background/60 shadow-sm transition-shadow focus-visible:shadow-md"
           />
+
           <FieldDescription>
             Commands insert snippets and work on any website. Right-click any
             text field to pick a snippet from the context menu.

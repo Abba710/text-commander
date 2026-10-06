@@ -62,11 +62,11 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <div className="flex min-w-0 flex-col">
                     <span className="truncate text-sm">{command.label}</span>
                     <span className="truncate text-xs text-muted-foreground">
-                      /{command.trigger}
+                      {command.trigger}
                     </span>
                   </div>
                   <CommandShortcut className="font-mono">
-                    /{command.trigger}
+                    {command.trigger}
                   </CommandShortcut>
                 </CommandItem>
               ))}

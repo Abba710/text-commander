@@ -1,6 +1,6 @@
 import type { TreeItem } from "@/types/app-types";
 
-export type TriggerError = "EMPTY" | "ALREADY_EXISTS";
+export type TriggerError = "EMPTY" | "ALREADY_EXISTS" | "NO_SLASH";
 
 export interface ValidatorInput {
   id: string;

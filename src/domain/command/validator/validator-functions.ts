@@ -29,6 +29,13 @@ export function validateTrigger({
     };
   }
 
+  if (!trigger.startsWith("/")) {
+    return {
+      success: false,
+      error: "NO_SLASH",
+    };
+  }
+
   for (const item of tree) {
     if (item.type === "command") {
       if (item.trigger === trigger && item.id !== id) {
