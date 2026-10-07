@@ -32,8 +32,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null;
 
   return (
-    <Command>
-      <CommandDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <CommandDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <Command>
         <CommandInput placeholder="Search commands and folders..." />
         <CommandList className="max-h-[420px]">
           <CommandEmpty className="py-8">
@@ -103,7 +103,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </CommandGroup>
           )}
         </CommandList>
-      </CommandDialog>
-    </Command>
+      </Command>
+    </CommandDialog>
   );
 }

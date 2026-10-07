@@ -9,30 +9,38 @@ import {
 } from "@/components/ui/command";
 import { KbdGroup, Kbd } from "@/components/ui/kbd";
 import { useSearch } from "@/hooks/use-search";
+import type { Command as CommandType } from "@/types/app-types";
 import { SearchX, TerminalSquare } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export function AutoComplete({ value }: { value: string }) {
+export function AutoComplete({
+  value,
+  children,
+}: {
+  value: string;
+  children: React.ReactNode;
+}) {
   const searchQueue = useSearch();
   const isCommandMode = value.includes("/");
-  const [commandText, setCommandText] = useState("");
+  const [activeCommand, setActiveCommand] = useState<CommandType | null>(null);
+  const [trigger, setTrigger] = useState("");
 
   useEffect(() => {
-    {
-      const start = value.lastIndexOf("/");
-      const end = value.indexOf(" ", start);
-      setCommandText(value.slice(start, end === -1 ? value.length : end));
-      console.log("use effect works", commandText);
-    }
-  }, [value]);
+    if (!isCommandMode) return;
+
+    const start = value.lastIndexOf("/");
+    const end = value.indexOf(" ", start);
+    setTrigger(value.slice(start, end === -1 ? value.length : end));
+    console.log("trigger: ", trigger, "command: ", activeCommand);
+  }, [value, isCommandMode]);
 
   return (
     <>
       {isCommandMode && (
         <Command>
           <CommandAutoCompleteInput
-            value={commandText}
-            className="pointer-events-none absolute size-0 opacity-0"
+            value={trigger}
+            className=" absolute size-0 opacity-0"
           />
 
           <CommandList className="max-h-[200px]">
@@ -49,7 +57,7 @@ export function AutoComplete({ value }: { value: string }) {
                   <CommandItem
                     key={command.id}
                     value={`${command.id} ${command.trigger} ${command.args}`}
-                    onSelect={() => console.log("command works")}
+                    onSelect={() => setActiveCommand(command)}
                     className="gap-1"
                   >
                     <span className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-muted/50">
@@ -92,6 +100,7 @@ export function AutoComplete({ value }: { value: string }) {
           </div>
         </Command>
       )}
+      {children}
     </>
   );
 }
