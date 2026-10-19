@@ -11,7 +11,7 @@ export const defaultTree: TreeItem[] = [
         type: "command",
         id: "1",
         label: "Hello dear User",
-        trigger: "hi",
+        trigger: "#hi",
         args: ["name"],
         template: "Hello, {name}! This is how commander works.",
       },

@@ -1,9 +1,9 @@
-import { useTreeManagement } from "./use-tree-management";
+import { useCommandStore } from "@/store/commandStore";
 import type { Command, CommandFolder, TreeItem } from "@/types/app-types";
 import { useMemo } from "react";
 
 export function useSearch() {
-  const { tree } = useTreeManagement();
+  const tree = useCommandStore((state) => state.tree);
 
   const flattenTree = (
     tree: TreeItem[],

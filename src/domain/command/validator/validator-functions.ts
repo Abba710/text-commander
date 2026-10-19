@@ -29,10 +29,10 @@ export function validateTrigger({
     };
   }
 
-  if (!trigger.startsWith("/")) {
+  if (!trigger.startsWith("#")) {
     return {
       success: false,
-      error: "NO_SLASH",
+      error: "NO_TRIGGER",
     };
   }
 

@@ -47,3 +47,6 @@ export interface CommandPreviewProps {
   trigger: string;
   previewArgs: string[];
 }
+
+export type FieldTypes =
+  HTMLInputElement | HTMLTextAreaElement | HTMLElement | null;

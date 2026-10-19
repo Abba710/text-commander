@@ -1,21 +1,18 @@
+// content/index.tsx
 import { createRoot } from "react-dom/client";
+import { FieldAutoComplete } from "@/components/autocomplite/field-autocoplete";
+import css from "@/index.css?inline";
 
-// ── Shadow DOM mount ──────────────────────────────────────────────────────────
-function mount() {
-  if (document.getElementById("cs-host")) return;
+const host = document.createElement("div");
+host.id = "text-commander-root";
+document.documentElement.appendChild(host);
 
-  const host = document.createElement("div");
-  host.id = "cs-host";
-  host.style.cssText =
-    "position:fixed;top:0;left:0;width:0;height:0;overflow:visible;z-index:2147483647;pointer-events:none;";
-  document.body.appendChild(host);
+const shadow = host.attachShadow({ mode: "open" });
+const style = document.createElement("style");
+style.textContent = css;
+shadow.appendChild(style);
 
-  const shadow = host.attachShadow({ mode: "open" });
-  const mountPoint = document.createElement("div");
+const mountPoint = document.createElement("div");
+shadow.appendChild(mountPoint);
 
-  shadow.appendChild(mountPoint);
-
-  createRoot(mountPoint).render(<div>Test</div>);
-}
-
-mount();
+createRoot(mountPoint).render(<FieldAutoComplete />);

@@ -9,35 +9,84 @@ import {
 } from "@/components/ui/command";
 import { KbdGroup, Kbd } from "@/components/ui/kbd";
 import { useSearch } from "@/hooks/use-search";
-import type { Command as CommandType } from "@/types/app-types";
+import type { Command as CommandType, FieldTypes } from "@/types/app-types";
 import { SearchX, TerminalSquare } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useKbrd } from "@/hooks/use-kbrd";
 
 export function AutoComplete({
   value,
-  children,
+  field,
+  setValue,
 }: {
   value: string;
-  children: React.ReactNode;
+  field: FieldTypes;
+  setValue: (value: string) => void;
 }) {
   const searchQueue = useSearch();
-  const isCommandMode = value.includes("/");
-  const [activeCommand, setActiveCommand] = useState<CommandType | null>(null);
+  const isCommandMode = value.includes("#");
   const [trigger, setTrigger] = useState("");
+  const commandRef = useRef<HTMLDivElement>(null);
+  useKbrd(commandRef, field, isCommandMode);
+
+  // Пользователь выбирает /команда
+  const handleOnActive = (value: string, selected: CommandType) => {
+    const argsLenght = selected.args.length;
+    function setFieldCrursor(f: FieldTypes, text: string) {
+      if (f instanceof HTMLInputElement || f instanceof HTMLTextAreaElement) {
+        const end = text.length;
+        f.setSelectionRange(end, end);
+      } else {
+        const selection = window.getSelection();
+        selection?.modify("move", "forward", "documentBoundary");
+      }
+    }
+
+    // Если аргументов нет
+    if (argsLenght < 1) {
+      const replacedText = value.replace(/#\S*/, selected.template);
+      setValue(replacedText);
+      setFieldCrursor(field, replacedText);
+      return;
+    } else {
+      const insertedCommand = value.match(
+        new RegExp(`^#\\S+(?:\\s+\\S+){${argsLenght}}`),
+      )?.[0];
+
+      // Если есть аргументы но они не введены
+      if (!insertedCommand) {
+        const newValue = value.replace(/#\S*/, selected.trigger + " ");
+        setValue(newValue);
+        setFieldCrursor(field, newValue);
+        return;
+      }
+
+      // Если аргументы введены
+      const parts = insertedCommand.trim().split(/\s+/);
+      const args = parts.slice(1);
+      const resolvedTemplate = selected.template.replace(
+        /\{[^}]+\}/g,
+        () => args.shift() ?? "",
+      );
+
+      setValue(value.replace(insertedCommand, resolvedTemplate));
+      setFieldCrursor(field, resolvedTemplate);
+      return;
+    }
+  };
 
   useEffect(() => {
     if (!isCommandMode) return;
-
-    const start = value.lastIndexOf("/");
+    console.log("command mode works");
+    const start = value.lastIndexOf("#");
     const end = value.indexOf(" ", start);
     setTrigger(value.slice(start, end === -1 ? value.length : end));
-    console.log("trigger: ", trigger, "command: ", activeCommand);
   }, [value, isCommandMode]);
 
   return (
     <>
       {isCommandMode && (
-        <Command>
+        <Command ref={commandRef} loop>
           <CommandAutoCompleteInput
             value={trigger}
             className=" absolute size-0 opacity-0"
@@ -57,7 +106,9 @@ export function AutoComplete({
                   <CommandItem
                     key={command.id}
                     value={`${command.id} ${command.trigger} ${command.args}`}
-                    onSelect={() => setActiveCommand(command)}
+                    onSelect={() => {
+                      handleOnActive(value, command);
+                    }}
                     className="gap-1"
                   >
                     <span className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-muted/50">
@@ -90,9 +141,6 @@ export function AutoComplete({
                 <Kbd>Enter</Kbd>
                 <span>Select</span>
 
-                <Kbd>Tab</Kbd>
-                <span>navigate between arguments</span>
-
                 <Kbd>Esc</Kbd>
                 <span>Close</span>
               </KbdGroup>
@@ -100,7 +148,6 @@ export function AutoComplete({
           </div>
         </Command>
       )}
-      {children}
     </>
   );
 }
