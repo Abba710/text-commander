@@ -17,7 +17,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content-script.tsx"]
+      "js": ["src/content-script.tsx"],
+      "run_at": "document_start"
     }
   ],
   "host_permissions": ["<all_urls>"],

@@ -13,6 +13,7 @@ import type { Command as CommandType, FieldTypes } from "@/types/app-types";
 import { SearchX, TerminalSquare } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useKbrd } from "@/hooks/use-kbrd";
+import { setCursor } from "@/lib/cursor-setter";
 
 export function AutoComplete({
   value,
@@ -29,39 +30,33 @@ export function AutoComplete({
   const commandRef = useRef<HTMLDivElement>(null);
   useKbrd(commandRef, field, isCommandMode);
 
-  // Пользователь выбирает /команда
+  // User press enter or chose command
   const handleOnActive = (value: string, selected: CommandType) => {
     const argsLenght = selected.args.length;
-    function setFieldCrursor(f: FieldTypes, text: string) {
-      if (f instanceof HTMLInputElement || f instanceof HTMLTextAreaElement) {
-        const end = text.length;
-        f.setSelectionRange(end, end);
-      } else {
-        const selection = window.getSelection();
-        selection?.modify("move", "forward", "documentBoundary");
-      }
-    }
 
-    // Если аргументов нет
+    // If command have no arguments
     if (argsLenght < 1) {
       const replacedText = value.replace(/#\S*/, selected.template);
       setValue(replacedText);
-      setFieldCrursor(field, replacedText);
+      setCursor(field, replacedText);
       return;
-    } else {
+    }
+    // If command have arguments
+    else {
+      // Parse command
       const insertedCommand = value.match(
         new RegExp(`^#\\S+(?:\\s+\\S+){${argsLenght}}`),
       )?.[0];
 
-      // Если есть аргументы но они не введены
+      // If no arguments are provided
       if (!insertedCommand) {
         const newValue = value.replace(/#\S*/, selected.trigger + " ");
         setValue(newValue);
-        setFieldCrursor(field, newValue);
+        setCursor(field, newValue);
         return;
       }
 
-      // Если аргументы введены
+      // If arguments are provided
       const parts = insertedCommand.trim().split(/\s+/);
       const args = parts.slice(1);
       const resolvedTemplate = selected.template.replace(
@@ -70,7 +65,7 @@ export function AutoComplete({
       );
 
       setValue(value.replace(insertedCommand, resolvedTemplate));
-      setFieldCrursor(field, resolvedTemplate);
+      setCursor(field, resolvedTemplate);
       return;
     }
   };
@@ -140,9 +135,6 @@ export function AutoComplete({
 
                 <Kbd>Enter</Kbd>
                 <span>Select</span>
-
-                <Kbd>Esc</Kbd>
-                <span>Close</span>
               </KbdGroup>
             </div>
           </div>

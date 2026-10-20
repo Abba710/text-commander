@@ -1,55 +1,8 @@
-import { isTextInput } from "@/domain/command/validator/text-field-validator";
-import { useEffect, useState, type RefObject } from "react";
-import type { FieldTypes } from "@/types/app-types";
-// hook for catch focus event
-export function useFocusedField() {
-  const [field, setField] = useState<FieldTypes>(null);
-
-  useEffect(() => {
-    const onFocusIn = (e: FocusEvent) => {
-      console.log("focus event: ", e);
-      const target = e.target;
-      console.log("event before check HTMLEl type: ", target);
-
-      if (target instanceof HTMLElement && isTextInput(target)) {
-        setField(target);
-        console.log("after check: ", target);
-      } else {
-        setField(null);
-      }
-    };
-
-    const onFocusOut = () => {
-      console.log("focus out");
-      setField(null);
-    };
-    document.addEventListener("focusin", onFocusIn, true);
-    document.addEventListener("focusout", onFocusOut, true);
-
-    return () => {
-      document.removeEventListener("focusin", onFocusIn, true);
-      document.removeEventListener("focusout", onFocusOut, true);
-    };
-  }, []);
-
-  return field;
-}
-
-export function useKbrd(
-  commandRef: RefObject<HTMLDivElement | null>,
-  field: HTMLElement | null,
-  mode: boolean,
-) {
-  type KeyAction = "navigate" | "accept" | "close";
-
-  const KEY_ACTIONS: Record<string, KeyAction> = {
-    ArrowUp: "navigate",
-    ArrowDown: "navigate",
-    Enter: "accept",
-    Tab: "accept",
-    Escape: "close",
-  };
-
+import { useEffect } from "react";
+import { KEY_ACTIONS } from "@/consts/key-actions";
+import type { KbrdTypes } from "@/types/app-types";
+// Forward navigation and selection keys to shadcn Command(CMDK's) built-in handlers.
+export function useKbrd({ commandRef, field, mode }: KbrdTypes) {
   useEffect(() => {
     if (mode === false || !field) return;
     const handleKeyDown = (e: KeyboardEvent) => {

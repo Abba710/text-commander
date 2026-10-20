@@ -1,6 +1,6 @@
 // content/index.tsx
 import { createRoot } from "react-dom/client";
-import { FieldAutoComplete } from "@/components/autocomplite/field-autocoplete";
+import { FieldAutoComplete } from "@/components/autocomplite/field-autocomplete";
 import css from "@/index.css?inline";
 
 const host = document.createElement("div");

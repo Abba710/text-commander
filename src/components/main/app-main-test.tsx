@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
 import { Card } from "../ui/card";
 import { useState } from "react";
-import { AutoComplete } from "@/components/autocomplite/app-auto-complite";
-import { useFocusedField } from "@/hooks/use-kbrd";
+import { AutoComplete } from "@/components/autocomplite/app-auto-complete";
+import { useFocusedField } from "@/hooks/use-focused-field";
 
 export function MainTest() {
   const navigate = useNavigate();

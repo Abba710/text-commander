@@ -1,20 +1,18 @@
-// content/field-autocomplete.tsx
 import { useEffect, useState } from "react";
-import { AutoComplete } from "./app-auto-complite";
-import { useFocusedField } from "@/hooks/use-kbrd";
-
+import { AutoComplete } from "./app-auto-complete";
+import { useFocusedField } from "@/hooks/use-focused-field";
+import type { FieldTypes } from "@/types/app-types";
 const MIN_WIDTH = 280;
 
-type Field = HTMLInputElement | HTMLTextAreaElement | HTMLElement;
-
-function readValue(el: Field) {
+function readValue(el: FieldTypes) {
   if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
     return el.value;
   }
-  return el.textContent ?? "";
+  return el?.textContent ?? "";
 }
 
-function writeValue(el: Field, next: string) {
+function writeValue(el: FieldTypes, next: string) {
+  if (!el) return;
   if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
     const proto = Object.getPrototypeOf(el);
     // Нативный setter нужен, чтобы React на странице увидел изменение
