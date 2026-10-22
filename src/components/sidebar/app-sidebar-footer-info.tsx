@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronsUpDown, LogOut, BadgeCheck, Settings } from "lucide-react";
+import { ChevronsUpDown, LogOut, BadgeCheck } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -14,15 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
-export function SidebarFooterInfo({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
+export function SidebarFooterInfo() {
+  const user = {
+    avatar: "",
+    name: "name",
+    email: "email",
   };
-}) {
   return (
     <div className="flex w-full items-center justify-center">
       <DropdownMenu>
@@ -51,7 +48,12 @@ export function SidebarFooterInfo({
             <ChevronsUpDown className="ml-auto size-4" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" align="start" sideOffset={8}>
+        <DropdownMenuContent
+          className={"w-15"}
+          side="right"
+          align="start"
+          sideOffset={8}
+        >
           <DropdownMenuGroup>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuItem>
@@ -59,15 +61,10 @@ export function SidebarFooterInfo({
               Profile
             </DropdownMenuItem>
           </DropdownMenuGroup>
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Settings />
-              Settings
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem
+              variant="destructive"
               onClick={() => {
                 console.log("logout trigger");
               }}

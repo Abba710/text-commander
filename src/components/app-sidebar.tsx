@@ -15,14 +15,6 @@ import {
   SidebarControls,
 } from "./sidebar";
 
-const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-};
-
 export function AppSidebar() {
   return (
     <Sidebar>
@@ -51,7 +43,7 @@ export function AppSidebar() {
 
       {/* User info */}
       <SidebarFooter>
-        <SidebarFooterInfo user={data.user} />
+        <SidebarFooterInfo />
       </SidebarFooter>
     </Sidebar>
   );

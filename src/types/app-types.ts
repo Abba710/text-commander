@@ -1,4 +1,3 @@
-import type { RefObject } from "react";
 export type TreeItem = Command | CommandFolder;
 
 export interface Command {
@@ -53,9 +52,3 @@ export type FieldTypes =
   HTMLInputElement | HTMLTextAreaElement | HTMLElement | null;
 
 export type KeyAction = "navigate" | "accept";
-
-export interface KbrdTypes {
-  commandRef: RefObject<HTMLDivElement | null>;
-  field: HTMLElement | null;
-  mode: boolean;
-}

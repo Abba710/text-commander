@@ -1,8 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, type RefObject } from "react";
 import { KEY_ACTIONS } from "@/consts/key-actions";
-import type { KbrdTypes } from "@/types/app-types";
+
 // Forward navigation and selection keys to shadcn Command(CMDK's) built-in handlers.
-export function useKbrd({ commandRef, field, mode }: KbrdTypes) {
+export function useKbrd(
+  commandRef: RefObject<HTMLDivElement | null>,
+  field: HTMLElement | null,
+  mode: boolean,
+) {
   useEffect(() => {
     if (mode === false || !field) return;
     const handleKeyDown = (e: KeyboardEvent) => {
