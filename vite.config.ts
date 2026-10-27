@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { resolve } from "node:path";
 import { crx } from "@crxjs/vite-plugin";
 import manifest from "./manifest.json" with { type: "json" };
+import svgr from "vite-plugin-svgr";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -20,6 +21,7 @@ export default defineConfig({
     tailwindcss(),
     babel({ presets: [reactCompilerPreset()] }),
     crx({ manifest }),
+    svgr(),
   ],
   resolve: {
     alias: {

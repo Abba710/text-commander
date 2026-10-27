@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "manifest_version": 3,
   "description": "Automate repetitive messages with reusable text commands. Create once, use anywhere, and stop copy-pasting the same text.",
-  "permissions": ["storage"],
+  "permissions": ["storage", "identity"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
@@ -24,5 +24,10 @@
   "host_permissions": ["<all_urls>"],
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+
+  "oauth2": {
+    "client_id": "1027338107750-2iglgenh0bvaoe7ul5bs9f8go5hjt7q9.apps.googleusercontent.com",
+    "scopes": ["openid", "email", "profile"]
   }
 }

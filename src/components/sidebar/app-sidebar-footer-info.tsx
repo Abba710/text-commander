@@ -1,8 +1,7 @@
 "use client";
-
-import { ChevronsUpDown, LogOut, BadgeCheck } from "lucide-react";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import GuestIcon from "@/assets/guest.svg?react";
+import { ChevronsUpDown, LogOut, BadgeCheck, LogIn } from "lucide-react";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,13 +12,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useEffect } from "react";
 
 export function SidebarFooterInfo() {
-  const user = {
-    avatar: "",
-    name: "name",
-    email: "email",
-  };
+  const { user, signInWithGoogle, logout } = useAuth();
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   return (
     <div className="flex w-full items-center justify-center">
       <DropdownMenu>
@@ -34,16 +35,31 @@ export function SidebarFooterInfo() {
         >
           <div className="gap-2 flex w-full items-center justify-center p-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-foreground">
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
+              {user ? (
+                <Avatar className="h-8 w-8 rounded-lg text-background">
+                  <AvatarImage
+                    src={user.metaData.avatar_url}
+                    alt={user.metaData.name}
+                  />
+                </Avatar>
+              ) : (
+                <GuestIcon className="size-6 text-background" />
+              )}
             </div>
+
             <div className="flex flex-col items-start justify-center text-left text-sm leading-tight">
-              <span className="truncate font-semibold text-sm">
-                {user.name}
-              </span>
-              <span className="truncate text-xs">{user.email}</span>
+              {user ? (
+                <>
+                  <span className="truncate font-semibold text-sm">
+                    {user?.metaData.name}
+                  </span>
+                  <span className="truncate text-xs">{user?.mail}</span>
+                </>
+              ) : (
+                <>
+                  <span className="truncate font-semibold text-sm">Guest</span>
+                </>
+              )}
             </div>
             <ChevronsUpDown className="ml-auto size-4" />
           </div>
@@ -63,15 +79,27 @@ export function SidebarFooterInfo() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => {
-                console.log("logout trigger");
-              }}
-            >
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
+            {user ? (
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                <LogOut />
+                Log out
+              </DropdownMenuItem>
+            ) : (
+              <DropdownMenuItem
+                variant="default"
+                onClick={() => {
+                  signInWithGoogle();
+                }}
+              >
+                <LogIn />
+                Log In
+              </DropdownMenuItem>
+            )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

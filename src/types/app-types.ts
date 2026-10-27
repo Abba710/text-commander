@@ -52,3 +52,14 @@ export type FieldTypes =
   HTMLInputElement | HTMLTextAreaElement | HTMLElement | null;
 
 export type KeyAction = "navigate" | "accept";
+
+export interface User {
+  id: string;
+  mail: string | undefined;
+  metaData: {
+    avatar_url?: string;
+    picture?: string;
+    full_name?: string;
+    name?: string;
+  };
+}
