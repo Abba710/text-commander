@@ -34,11 +34,11 @@ export function MainInfo() {
               <span>
                 Type{" "}
                 <code className="rounded border border-border/60 bg-muted px-1 py-0.5 font-mono text-xs">
-                  /hi Name
+                  #hi Name
                 </code>
                 , for example{" "}
                 <code className="rounded border border-border/60 bg-muted px-1 py-0.5 font-mono text-xs">
-                  /hi Alex
+                  #hi Alex
                 </code>
                 , to insert a personalized greeting for Alex
               </span>
@@ -72,15 +72,18 @@ export function MainInfo() {
             <li className="flex items-start gap-2">
               <span className="mt-1.5 size-1 shrink-0 rounded-full bg-muted-foreground" />
               <span>
-                Right-click inside a text field to open the list of available
-                commands
+                write{" "}
+                <code className="rounded border border-border/60 bg-muted px-1 py-0.5 font-mono text-xs">
+                  #
+                </code>{" "}
+                inside a text field to open the list of available commands
               </span>
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-1.5 size-1 shrink-0 rounded-full bg-muted-foreground" />
               <span>
-                Use the context menu to choose a command without having to
-                remember its shortcut
+                Use the menu to choose a command without having to remember its
+                shortcut
               </span>
             </li>
           </ul>

@@ -35,7 +35,7 @@ export function MainTest() {
               <FieldDescription>
                 Try out your commands below. Type{" "}
                 <kbd className="inline-flex items-center rounded-md border border-border/60 bg-muted px-1.5 py-0.5 font-mono text-xs font-medium text-foreground shadow-sm">
-                  /hi
+                  #hi
                 </kbd>{" "}
                 to see one in action.
               </FieldDescription>
@@ -55,8 +55,11 @@ export function MainTest() {
             className="min-h-56 resize-none rounded-xl border-border/60 bg-background/60 shadow-sm transition-shadow focus-visible:shadow-md"
           />
           <FieldDescription>
-            Commands insert snippets and work on any website. Right-click any
-            text field to pick a snippet from the context menu.
+            Commands insert snippets and work on any website. Type{" "}
+            <code className="rounded border border-border/60 bg-muted px-1 py-0.5 font-mono text-xs">
+              #
+            </code>{" "}
+            in any text field to pick a command from the menu.
           </FieldDescription>
 
           {/* Create command CTA */}
