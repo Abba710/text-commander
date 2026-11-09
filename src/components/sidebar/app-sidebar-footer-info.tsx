@@ -1,7 +1,6 @@
 "use client";
 import GuestIcon from "@/assets/guest.svg?react";
-import { ChevronsUpDown, LogOut, BadgeCheck, LogIn } from "lucide-react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { ChevronsUpDown, LogOut, CreditCard, LogIn } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,16 +34,7 @@ export function SidebarFooterInfo() {
         >
           <div className="gap-2 flex w-full items-center justify-center p-2">
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-foreground">
-              {user ? (
-                <Avatar className="h-8 w-8 rounded-lg text-background">
-                  <AvatarImage
-                    src={user.metaData.avatar_url}
-                    alt={user.metaData.name}
-                  />
-                </Avatar>
-              ) : (
-                <GuestIcon className="size-6 text-background" />
-              )}
+              <GuestIcon className="size-6 text-background" />
             </div>
 
             <div className="flex flex-col items-start justify-center text-left text-sm leading-tight">
@@ -73,8 +63,8 @@ export function SidebarFooterInfo() {
           <DropdownMenuGroup>
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuItem>
-              <BadgeCheck />
-              Profile
+              <CreditCard />
+              Plan
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
