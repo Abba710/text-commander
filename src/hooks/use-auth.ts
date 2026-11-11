@@ -42,6 +42,7 @@ export function useAuth() {
   }, []);
 
   const signInWithGoogle = useCallback(() => {
+    setLoading(true);
     const manifest = chrome.runtime.getManifest() as ChromeManifest;
 
     if (!manifest.oauth2) {
@@ -90,11 +91,13 @@ export function useAuth() {
 
         if (error) {
           console.error("Supabase auth error", error);
+          setLoading(false);
           return;
         }
 
         if (data.session?.user) {
           setUser(mapUser(data.session.user));
+          setLoading(false);
           console.log(data);
         }
       },

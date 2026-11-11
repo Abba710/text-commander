@@ -1,7 +1,7 @@
 import { Search, Keyboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { SearchModal } from "@/components/search/app-search-modal";
+import { SearchModal } from "@/components/modal/app-search-modal";
 import { useState, useEffect } from "react";
 
 export function SearchTrigger() {
