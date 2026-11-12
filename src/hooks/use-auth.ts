@@ -11,6 +11,7 @@ interface ChromeManifest {
 }
 
 export function useAuth() {
+  // TODO: Сделать вход между сессиями незаметным
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 

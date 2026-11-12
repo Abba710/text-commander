@@ -1,3 +1,3 @@
 import { MainTest } from "./app-main-test";
-import { MainInfo } from "./app-main-info";
+import { MainInfo } from "../guide/app-main-info";
 export { MainTest, MainInfo };
