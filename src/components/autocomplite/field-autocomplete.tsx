@@ -67,7 +67,7 @@ export function FieldAutoComplete() {
 
   const listStyle = {
     position: "fixed",
-    top: rect.top - 120,
+    top: rect.top - 150,
     left: rect.left,
     width: Math.max(rect.width, MIN_WIDTH),
     zIndex: 2147483647,

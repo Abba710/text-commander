@@ -6,6 +6,7 @@ import {
 } from "@/components";
 import { Outlet } from "react-router";
 import { AuthModal } from "@/components/modal/auth-modal";
+import { OfferBanner } from "@/components/app-activation-banner";
 export default function App() {
   return (
     <>
@@ -17,6 +18,7 @@ export default function App() {
             <Outlet />
           </SidebarInset>
         </SidebarProvider>
+        <OfferBanner />
       </div>
       <AuthModal />
     </>

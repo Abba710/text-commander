@@ -8,7 +8,7 @@ export function SidebarHeaderInfo() {
       </div>
       <div className="flex flex-col items-start justify-center text-left text-sm leading-tight">
         <span className="truncate font-semibold text-sm">Text-Commander</span>
-        <span className="truncate text-xs">PRO</span>
+        <span className="truncate text-xs">BETA</span>
       </div>
     </div>
   );
