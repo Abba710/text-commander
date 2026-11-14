@@ -26,7 +26,7 @@ export function AutoComplete({
   field: FieldTypes;
   setValue: (value: string) => void;
 }) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [isAuth, setAuth] = useState<boolean>(false);
   const searchQueue = useSearch();
   const isCommandMode = value.includes("#");
@@ -85,72 +85,69 @@ export function AutoComplete({
 
   return (
     <>
-      {isCommandMode && (
-        <Command ref={commandRef} loop>
-          {isAuth ? (
-            <>
-              <CommandAutoCompleteInput
-                value={trigger}
-                className=" absolute size-0 opacity-0"
-              />
+      {isCommandMode &&
+        (isAuth ? (
+          <Command ref={commandRef} loop>
+            <CommandAutoCompleteInput
+              value={trigger}
+              className=" absolute size-0 opacity-0"
+            />
 
-              <CommandList className="max-h-[200px]">
-                <CommandEmpty className="h-5! flex items-center justify-center">
-                  <div className="flex items-center justify-center gap-2 text-muted-foreground">
-                    <SearchX className="size-4 opacity-50" />
-                    <span className="text-sm">No results found.</span>
-                  </div>
-                </CommandEmpty>
-
-                {searchQueue.flattenedCommands.length > 0 && (
-                  <CommandGroup>
-                    {searchQueue.flattenedCommands.map((command) => (
-                      <CommandItem
-                        key={command.id}
-                        value={`${command.id} ${command.trigger} ${command.args}`}
-                        onSelect={() => {
-                          handleOnActive(value, command);
-                        }}
-                        className="gap-1"
-                      >
-                        <span className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-muted/50">
-                          <TerminalSquare className="size-3.5 text-muted-foreground" />
-                        </span>
-
-                        <div className="flex min-w-0 items-center gap-2">
-                          <span className="truncate text-sm">
-                            {command.trigger}
-                          </span>
-                          <span className="truncate text-xs text-muted-foreground">
-                            {command.args.map((arg) => `${arg}`).join(" ")}
-                          </span>
-                        </div>
-
-                        <CommandShortcut className="font-mono">
-                          {command.label}
-                        </CommandShortcut>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-              </CommandList>
-              <div className="border-t p-2">
-                <div className="flex gap-2 text-xs text-muted-foreground">
-                  <KbdGroup>
-                    <Kbd>↑↓</Kbd>
-                    <span>Navigate</span>
-
-                    <Kbd>Enter</Kbd>
-                    <span>Select</span>
-                  </KbdGroup>
+            <CommandList className="max-h-[200px]">
+              <CommandEmpty className="h-5! flex items-center justify-center">
+                <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                  <SearchX className="size-4 opacity-50" />
+                  <span className="text-sm">No results found.</span>
                 </div>
+              </CommandEmpty>
+
+              {searchQueue.flattenedCommands.length > 0 && (
+                <CommandGroup>
+                  {searchQueue.flattenedCommands.map((command) => (
+                    <CommandItem
+                      key={command.id}
+                      value={`${command.id} ${command.trigger} ${command.args}`}
+                      onSelect={() => {
+                        handleOnActive(value, command);
+                      }}
+                      className="gap-1"
+                    >
+                      <span className="flex size-6 shrink-0 items-center justify-center rounded-md border bg-muted/50">
+                        <TerminalSquare className="size-3.5 text-muted-foreground" />
+                      </span>
+
+                      <div className="flex min-w-0 items-center gap-2">
+                        <span className="truncate text-sm">
+                          {command.trigger}
+                        </span>
+                        <span className="truncate text-xs text-muted-foreground">
+                          {command.args.map((arg) => `${arg}`).join(" ")}
+                        </span>
+                      </div>
+
+                      <CommandShortcut className="font-mono">
+                        {command.label}
+                      </CommandShortcut>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </CommandList>
+            <div className="border-t p-2">
+              <div className="flex gap-2 text-xs text-muted-foreground">
+                <KbdGroup>
+                  <Kbd>↑↓</Kbd>
+                  <span>Navigate</span>
+
+                  <Kbd>Enter</Kbd>
+                  <span>Select</span>
+                </KbdGroup>
               </div>
-            </>
-          ) : (
-            <SignIn />
-          )}
-        </Command>
-      )}
+            </div>
+          </Command>
+        ) : loading ? null : (
+          <SignIn />
+        ))}
     </>
   );
 }

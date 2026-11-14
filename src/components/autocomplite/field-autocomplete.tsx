@@ -4,6 +4,7 @@ import { useFocusedField } from "@/hooks/use-focused-field";
 import type { FieldTypes } from "@/types/app-types";
 import { useSearch } from "@/hooks/use-search";
 import { useAuth } from "@/hooks/use-auth";
+
 const MIN_WIDTH = 280;
 
 function readValue(el: FieldTypes) {
@@ -31,6 +32,8 @@ export function FieldAutoComplete() {
 
   const field = useFocusedField();
   const [value, setValue] = useState("");
+  const [space, setSpace] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
 
   useEffect(() => {
@@ -51,7 +54,6 @@ export function FieldAutoComplete() {
       setRect(null);
       return;
     }
-
     const update = () => setRect(field.getBoundingClientRect());
     update();
     window.addEventListener("scroll", update, true);
@@ -61,6 +63,12 @@ export function FieldAutoComplete() {
       window.removeEventListener("resize", update);
     };
   }, [field, value]);
+
+  useEffect(() => {
+    console.log("user from effect: ", user);
+    setSpace(calcSpace());
+    setWindowWidth(calcWidth());
+  }, [user, rect]);
 
   const handleSetValue = (next: string) => {
     if (!field) return;
@@ -77,12 +85,18 @@ export function FieldAutoComplete() {
     return searchQueue.flattenedCommands.length > 3 ? 55 * 5 : 150;
   }
 
-  const space = calcSpace();
+  function calcWidth() {
+    if (!user || !rect) {
+      return 380;
+    }
+    return Math.max(rect.width, MIN_WIDTH);
+  }
+
   const listStyle = {
     position: "fixed",
     top: rect.top - space,
     left: rect.left,
-    width: Math.max(rect.width, MIN_WIDTH),
+    width: windowWidth,
     zIndex: 2147483647,
   } as const;
 

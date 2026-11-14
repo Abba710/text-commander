@@ -1,5 +1,4 @@
 import type { TreeItem } from "./app-types";
-
 export interface CommandStore {
   tree: TreeItem[];
 

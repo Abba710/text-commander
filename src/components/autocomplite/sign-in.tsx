@@ -8,7 +8,7 @@ const EXTENSION_URL = import.meta.env.DEV
 
 export function SignIn() {
   return (
-    <Card className="max-w-sm gap-6 rounded-2xl border border-border bg-background p-6 shadow-lg">
+    <Card className="max-w-sm gap-6 rounded-2xl border border-border p-6 shadow-lg">
       <CardHeader className="flex-row items-center gap-3 border-b border-border pb-4 text-left">
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-foreground text-background shadow-sm">
           <Terminal className="h-5 w-5" />

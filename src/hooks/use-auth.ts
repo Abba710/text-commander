@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/util/supabase";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type { User } from "@/types/app-types";
+import { AUTH_KEY } from "@/consts/supabase-consts";
 
 interface ChromeManifest {
   oauth2?: {
@@ -37,8 +38,24 @@ export function useAuth() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ? mapUser(session.user) : null);
+      setLoading(false);
     });
     return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const onChange = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      area: string,
+    ) => {
+      if (area !== "local" || !changes[AUTH_KEY]) return;
+      const raw = changes[AUTH_KEY].newValue;
+      const session = raw ? JSON.parse(raw as string) : null;
+      setUser(session?.user ?? null);
+      setLoading(false);
+    };
+    chrome.storage.onChanged.addListener(onChange);
+    return () => chrome.storage.onChanged.removeListener(onChange);
   }, []);
 
   const signInWithGoogle = useCallback(() => {
@@ -69,6 +86,7 @@ export function useAuth() {
       async (redirectedTo) => {
         if (chrome.runtime.lastError || !redirectedTo) {
           console.error("Auth failed", chrome.runtime.lastError);
+          setLoading(false);
           return;
         }
 
@@ -79,6 +97,7 @@ export function useAuth() {
 
         if (!idToken) {
           console.error("id_token not found");
+          setLoading(false);
           return;
         }
 
@@ -107,6 +126,7 @@ export function useAuth() {
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setLoading(false);
   }, []);
 
   return {
