@@ -38,7 +38,6 @@ export function useAuth() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ? mapUser(session.user) : null);
     });
-
     return () => subscription.unsubscribe();
   }, []);
 

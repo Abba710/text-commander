@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { AutoComplete } from "./app-auto-complete";
 import { useFocusedField } from "@/hooks/use-focused-field";
 import type { FieldTypes } from "@/types/app-types";
+import { useSearch } from "@/hooks/use-search";
+import { useAuth } from "@/hooks/use-auth";
 const MIN_WIDTH = 280;
 
 function readValue(el: FieldTypes) {
@@ -24,6 +26,9 @@ function writeValue(el: FieldTypes, next: string) {
 }
 
 export function FieldAutoComplete() {
+  const { user } = useAuth();
+  const searchQueue = useSearch();
+
   const field = useFocusedField();
   const [value, setValue] = useState("");
   const [rect, setRect] = useState<DOMRect | null>(null);
@@ -65,9 +70,17 @@ export function FieldAutoComplete() {
 
   if (!field || !rect) return null;
 
+  function calcSpace() {
+    if (!user) {
+      return 280;
+    }
+    return searchQueue.flattenedCommands.length > 3 ? 55 * 5 : 150;
+  }
+
+  const space = calcSpace();
   const listStyle = {
     position: "fixed",
-    top: rect.top - 150,
+    top: rect.top - space,
     left: rect.left,
     width: Math.max(rect.width, MIN_WIDTH),
     zIndex: 2147483647,
