@@ -10,8 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useEntitlements } from "@/hooks/use-entitlement";
 
-const OFFER_ENDS_AT = new Date("2026-12-01T00:00:00Z").getTime();
 const ACTIVATE_URL = "#";
 
 const offer = {
@@ -62,8 +62,8 @@ function pad(value: number) {
   return String(value).padStart(2, "0");
 }
 
-function getTimeLeft(deadline: number): TimeLeft {
-  const total = Math.max(deadline - Date.now(), 0);
+function getTimeLeft(deadline: string): TimeLeft {
+  const total = Math.max(new Date(deadline).getTime() - Date.now(), 0);
   const sec = Math.floor(total / 1000);
   return {
     total,
@@ -74,7 +74,7 @@ function getTimeLeft(deadline: number): TimeLeft {
   };
 }
 
-function useCountdown(deadline: number) {
+function useCountdown(deadline: string) {
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(deadline));
 
   useEffect(() => {
@@ -123,8 +123,11 @@ function Benefits() {
 }
 
 export function OfferBanner() {
+  const { entitlements } = useEntitlements();
+  const core = entitlements.core;
   const [open, setOpen] = useState(false);
-  const timeLeft = useCountdown(OFFER_ENDS_AT);
+  if (!core || !core.expires_at) return null;
+  const timeLeft = useCountdown(core?.expires_at);
 
   if (timeLeft.total === 0) return null;
 

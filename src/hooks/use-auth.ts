@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/util/supabase";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import type { User } from "@/types/app-types";
+import type { User } from "@/types/user-types";
 import { AUTH_KEY } from "@/consts/supabase-consts";
+import { useEntitlements } from "./use-entitlement";
 
 interface ChromeManifest {
   oauth2?: {
@@ -13,6 +14,7 @@ interface ChromeManifest {
 
 export function useAuth() {
   // TODO: Сделать вход между сессиями незаметным
+  const { getEntitlements, removeEntitlements } = useEntitlements();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +31,7 @@ export function useAuth() {
       } = await supabase.auth.getSession();
 
       setUser(session?.user ? mapUser(session.user) : null);
+      getEntitlements();
       setLoading(false);
     };
 
@@ -38,6 +41,7 @@ export function useAuth() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ? mapUser(session.user) : null);
+      getEntitlements();
       setLoading(false);
     });
     return () => subscription.unsubscribe();
@@ -52,6 +56,7 @@ export function useAuth() {
       const raw = changes[AUTH_KEY].newValue;
       const session = raw ? JSON.parse(raw as string) : null;
       setUser(session?.user ?? null);
+      getEntitlements();
       setLoading(false);
     };
     chrome.storage.onChanged.addListener(onChange);
@@ -116,6 +121,7 @@ export function useAuth() {
 
         if (data.session?.user) {
           setUser(mapUser(data.session.user));
+          getEntitlements();
           setLoading(false);
           console.log(data);
         }
@@ -126,6 +132,7 @@ export function useAuth() {
   const logout = useCallback(async () => {
     await supabase.auth.signOut();
     setUser(null);
+    removeEntitlements();
     setLoading(false);
   }, []);
 
