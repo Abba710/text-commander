@@ -78,7 +78,14 @@ function useCountdown(deadline: string) {
   const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(deadline));
 
   useEffect(() => {
-    const id = setInterval(() => setTimeLeft(getTimeLeft(deadline)), 1000);
+    setTimeLeft(getTimeLeft(deadline));
+
+    const id = setInterval(() => {
+      const next = getTimeLeft(deadline);
+      setTimeLeft(next);
+      if (next.total === 0) clearInterval(id);
+    }, 1000);
+
     return () => clearInterval(id);
   }, [deadline]);
 
@@ -124,10 +131,17 @@ function Benefits() {
 
 export function OfferBanner() {
   const { entitlements } = useEntitlements();
-  const core = entitlements.core;
+  const core = entitlements?.core;
+
+  if (!core?.expires_at) return null;
+  if (core.feature_type !== "trial") return null;
+
+  return <OfferBannerContent deadline={core.expires_at} />;
+}
+
+function OfferBannerContent({ deadline }: { deadline: string }) {
   const [open, setOpen] = useState(false);
-  if (!core || !core.expires_at) return null;
-  const timeLeft = useCountdown(core?.expires_at);
+  const timeLeft = useCountdown(deadline);
 
   if (timeLeft.total === 0) return null;
 
@@ -138,10 +152,10 @@ export function OfferBanner() {
         onClick={() => setOpen(true)}
         className={bannerClass}
       >
-        <div className="flex items-center justify-between">
+        <span className="flex items-center justify-between">
           <Badge>{offer.badge}</Badge>
           <Clock className="size-3.5 text-muted-foreground" />
-        </div>
+        </span>
         <span className="text-sm font-semibold">{offer.headline}</span>
         <Timer timeLeft={timeLeft} />
         <span className="flex items-center gap-1 text-xs font-medium">

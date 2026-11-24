@@ -29,7 +29,6 @@ function writeValue(el: FieldTypes, next: string) {
 export function FieldAutoComplete() {
   const { user } = useAuth();
   const searchQueue = useSearch();
-
   const field = useFocusedField();
   const [value, setValue] = useState("");
   const [space, setSpace] = useState(0);

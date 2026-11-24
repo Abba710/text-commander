@@ -17,6 +17,7 @@ export function useAuth() {
   const { getEntitlements, removeEntitlements } = useEntitlements();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initialize, setInitialize] = useState(true);
 
   const mapUser = (u: SupabaseUser): User => ({
     id: u.id,
@@ -33,6 +34,7 @@ export function useAuth() {
       setUser(session?.user ? mapUser(session.user) : null);
       getEntitlements();
       setLoading(false);
+      setInitialize(false);
     };
 
     init();
@@ -141,5 +143,6 @@ export function useAuth() {
     loading,
     signInWithGoogle,
     logout,
+    initialize,
   };
 }

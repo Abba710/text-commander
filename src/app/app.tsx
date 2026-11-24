@@ -7,7 +7,7 @@ import {
 import { Outlet } from "react-router";
 import { AuthModal } from "@/components/modal/auth-modal";
 import { OfferBanner } from "@/components/app-activation-banner";
-
+import { TrialExpiredBanner } from "@/components/app-expired-banner";
 export default function App() {
   return (
     <>
@@ -20,6 +20,7 @@ export default function App() {
           </SidebarInset>
         </SidebarProvider>
         <OfferBanner />
+        <TrialExpiredBanner />
       </div>
       <AuthModal />
     </>
